@@ -1,6 +1,6 @@
 ﻿namespace ProjectsStructure
 {
-   partial class Form1
+   partial class FormStructure
    {
       /// <summary>
       /// Обязательная переменная конструктора.
@@ -28,17 +28,20 @@
       /// </summary>
       private void InitializeComponent()
       {
-         this.textBox1 = new System.Windows.Forms.TextBox();
+         this.components = new System.ComponentModel.Container();
+         this.textBoxExcelFileStructure = new System.Windows.Forms.TextBox();
          this.label1 = new System.Windows.Forms.Label();
          this.buttonBrowse = new System.Windows.Forms.Button();
+         this.buttonRead = new System.Windows.Forms.Button();
+         this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
          this.SuspendLayout();
          // 
-         // textBox1
+         // textBoxExcelFileStructure
          // 
-         this.textBox1.Location = new System.Drawing.Point(12, 22);
-         this.textBox1.Name = "textBox1";
-         this.textBox1.Size = new System.Drawing.Size(489, 20);
-         this.textBox1.TabIndex = 0;
+         this.textBoxExcelFileStructure.Location = new System.Drawing.Point(12, 22);
+         this.textBoxExcelFileStructure.Name = "textBoxExcelFileStructure";
+         this.textBoxExcelFileStructure.Size = new System.Drawing.Size(489, 20);
+         this.textBoxExcelFileStructure.TabIndex = 0;
          // 
          // label1
          // 
@@ -56,17 +59,31 @@
          this.buttonBrowse.Size = new System.Drawing.Size(27, 23);
          this.buttonBrowse.TabIndex = 2;
          this.buttonBrowse.Text = "...";
+         this.toolTip1.SetToolTip(this.buttonBrowse, "Выбор файла Excel структур");
          this.buttonBrowse.UseVisualStyleBackColor = true;
+         this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
          // 
-         // Form1
+         // buttonRead
+         // 
+         this.buttonRead.Location = new System.Drawing.Point(540, 20);
+         this.buttonRead.Name = "buttonRead";
+         this.buttonRead.Size = new System.Drawing.Size(57, 23);
+         this.buttonRead.TabIndex = 3;
+         this.buttonRead.Text = "Read";
+         this.toolTip1.SetToolTip(this.buttonRead, "Считывание структур из файла");
+         this.buttonRead.UseVisualStyleBackColor = true;
+         this.buttonRead.Click += new System.EventHandler(this.buttonRead_Click);
+         // 
+         // FormStructure
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(607, 320);
+         this.Controls.Add(this.buttonRead);
          this.Controls.Add(this.buttonBrowse);
          this.Controls.Add(this.label1);
-         this.Controls.Add(this.textBox1);
-         this.Name = "Form1";
+         this.Controls.Add(this.textBoxExcelFileStructure);
+         this.Name = "FormStructure";
          this.Text = "Form1";
          this.ResumeLayout(false);
          this.PerformLayout();
@@ -75,9 +92,11 @@
 
       #endregion
 
-      private System.Windows.Forms.TextBox textBox1;
+      private System.Windows.Forms.TextBox textBoxExcelFileStructure;
       private System.Windows.Forms.Label label1;
       private System.Windows.Forms.Button buttonBrowse;
+      private System.Windows.Forms.ToolTip toolTip1;
+      private System.Windows.Forms.Button buttonRead;
    }
 }
 

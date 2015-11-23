@@ -32,12 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAcl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\nAcl.1.0.1.1\lib\net20\NAcl.dll</HintPath>
+    <Reference Include="EPPlus, Version=4.0.4.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.0.4\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NAcl.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\nAcl.1.0.1.1\lib\net20\NAcl.Web.dll</HintPath>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.2.1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -53,16 +53,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Model\Errors\Error.cs" />
+    <Compile Include="Model\Errors\FormErrors.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Model\Errors\FormErrors.Designer.cs">
+      <DependentUpon>FormErrors.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Errors\Inspector.cs" />
+    <Compile Include="Model\ExcelStructureColumns.cs" />
+    <Compile Include="Model\FolderItem.cs" />
+    <Compile Include="Model\FormStructure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Model\FormStructure.Designer.cs">
+      <DependentUpon>FormStructure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Lib\StringExt.cs" />
+    <Compile Include="Model\Log.cs" />
+    <Compile Include="Model\Structure.cs" />
+    <Compile Include="Model\StructureService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Model\Errors\FormErrors.resx">
+      <DependentUpon>FormErrors.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\FormStructure.resx">
+      <DependentUpon>FormStructure.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -73,6 +90,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -86,6 +109,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
