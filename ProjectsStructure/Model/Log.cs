@@ -38,30 +38,7 @@ namespace ProjectsStructure
 
       static Log()
       {
-         try
-         {
-            // Настройка конфигурации логгера.
-            _logger = LogManager.GetLogger("ProjectsStructure");                        
-                        
-            var config = new LoggingConfiguration();
-            // mail
-            var mailTarget = new MailTarget();
-            mailTarget.To = "vildar82@gmail.com";
-            mailTarget.From = "KhisyametdinovVT@pik.ru";
-            mailTarget.Subject = string.Format("Error у {0}, ProjectsStructure", Environment.UserName);
-            mailTarget.SmtpServer = "ex20pik.picompany.ru";
-            mailTarget.Body = "${longdate} ${message} ${exception:format=tostring}";
-
-            config.AddTarget("mail", mailTarget);
-
-            var rule = new LoggingRule("*", LogLevel.Error, mailTarget);
-            config.LoggingRules.Add(rule);
-            LogManager.Configuration.AddTarget(mailTarget);
-            LogManager.Configuration.LoggingRules.Add(rule);
-         }
-         catch
-         {
-         }
+         _logger = LogManager.GetLogger("ProjectsStructure");         
       }
 
       /// <summary>

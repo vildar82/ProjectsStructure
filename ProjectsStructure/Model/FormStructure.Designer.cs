@@ -34,6 +34,9 @@
          this.buttonBrowse = new System.Windows.Forms.Button();
          this.buttonRead = new System.Windows.Forms.Button();
          this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+         this.comboBoxStructures = new System.Windows.Forms.ComboBox();
+         this.label2 = new System.Windows.Forms.Label();
+         this.buttonViewStructures = new System.Windows.Forms.Button();
          this.SuspendLayout();
          // 
          // textBoxExcelFileStructure
@@ -74,13 +77,43 @@
          this.buttonRead.UseVisualStyleBackColor = true;
          this.buttonRead.Click += new System.EventHandler(this.buttonRead_Click);
          // 
+         // comboBoxStructures
+         // 
+         this.comboBoxStructures.FormattingEnabled = true;
+         this.comboBoxStructures.Location = new System.Drawing.Point(12, 72);
+         this.comboBoxStructures.Name = "comboBoxStructures";
+         this.comboBoxStructures.Size = new System.Drawing.Size(132, 21);
+         this.comboBoxStructures.TabIndex = 4;
+         // 
+         // label2
+         // 
+         this.label2.AutoSize = true;
+         this.label2.Location = new System.Drawing.Point(12, 56);
+         this.label2.Name = "label2";
+         this.label2.Size = new System.Drawing.Size(60, 13);
+         this.label2.TabIndex = 1;
+         this.label2.Text = "Структуры";
+         // 
+         // buttonViewStructures
+         // 
+         this.buttonViewStructures.Location = new System.Drawing.Point(150, 72);
+         this.buttonViewStructures.Name = "buttonViewStructures";
+         this.buttonViewStructures.Size = new System.Drawing.Size(40, 23);
+         this.buttonViewStructures.TabIndex = 5;
+         this.buttonViewStructures.Text = "View";
+         this.buttonViewStructures.UseVisualStyleBackColor = true;
+         this.buttonViewStructures.Click += new System.EventHandler(this.buttonViewStructures_Click);
+         // 
          // FormStructure
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(607, 320);
+         this.Controls.Add(this.buttonViewStructures);
+         this.Controls.Add(this.comboBoxStructures);
          this.Controls.Add(this.buttonRead);
          this.Controls.Add(this.buttonBrowse);
+         this.Controls.Add(this.label2);
          this.Controls.Add(this.label1);
          this.Controls.Add(this.textBoxExcelFileStructure);
          this.Name = "FormStructure";
@@ -97,6 +130,9 @@
       private System.Windows.Forms.Button buttonBrowse;
       private System.Windows.Forms.ToolTip toolTip1;
       private System.Windows.Forms.Button buttonRead;
+      private System.Windows.Forms.ComboBox comboBoxStructures;
+      private System.Windows.Forms.Label label2;
+      private System.Windows.Forms.Button buttonViewStructures;
    }
 }
 

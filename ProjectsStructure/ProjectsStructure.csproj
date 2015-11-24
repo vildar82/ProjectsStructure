@@ -73,6 +73,12 @@
     <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Structure.cs" />
     <Compile Include="Model\StructureService.cs" />
+    <Compile Include="Model\ViewStructure\FormViewStructure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Model\ViewStructure\FormViewStructure.Designer.cs">
+      <DependentUpon>FormViewStructure.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Model\Errors\FormErrors.resx">
@@ -80,6 +86,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Model\FormStructure.resx">
       <DependentUpon>FormStructure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\ViewStructure\FormViewStructure.resx">
+      <DependentUpon>FormViewStructure.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -15,28 +15,33 @@ namespace ProjectsStructure.Model
       private int _template;
       private int _link;
 
+      private ExcelWorksheet _ws;
+      private StructureService _ss;
+
       public int LevelFirst { get { return _levelFirst; } }
       public int LevelLast { get { return _levelLast; } }
       public int Structure { get { return _structure; } }
       public int Template { get { return _template; } }
       public int Link { get { return _link; } }
 
-      public ExcelStructureColumns(ExcelWorksheet ws, StructureService structService)
-      {         
+      public ExcelStructureColumns(ExcelWorksheet ws, StructureService ss)
+      {
+         _ws = ws;
+         _ss = ss;
          // определение первого и последнего столбца уровня
-         defLevelColumns(ws, structService);         
+         defLevelColumns();         
          // определение остальных столбццов
-         defOtherColumns(ws, structService);                  
+         defOtherColumns();                  
       }     
 
-      private void defLevelColumns(ExcelWorksheet ws, StructureService structService)
+      private void defLevelColumns()
       {
          // определение первого и последнего столбца уровня
          string colName = string.Empty;
          int col = 1;
          do
          {
-            colName = ws.Cells[1, col].Text;
+            colName = _ws.Cells[1, col].Text;
             if (colName.StartsWith("Уровень", StringComparison.OrdinalIgnoreCase))
             {
                if (_levelFirst == 0)
@@ -52,10 +57,10 @@ namespace ProjectsStructure.Model
             col++;
          } while (!string.IsNullOrEmpty(colName));
          // Проверка определенных столбцов
-         checkLevelsDefColums(ws, structService);
+         checkLevelsDefColums();
       }
 
-      private void checkLevelsDefColums(ExcelWorksheet ws, StructureService structService)
+      private void checkLevelsDefColums()
       {
          // Проверка определенных столбцов уровней
          if (_levelFirst == 0 || _levelLast == 0)
@@ -71,19 +76,19 @@ namespace ProjectsStructure.Model
             }
             string errMsg = string.Format(
                      "Не определен {0} столбец уровней на листе шаблона структуры {1} в файле {2}",
-                     errColDef, ws.Name, ws.Workbook.Properties.Title);
-            structService.Inspector.AddError(new Errors.Error(errMsg));
+                     errColDef, _ws.Name, _ss.FileExceStructure);
+            _ss.Inspector.AddError(new Errors.Error(errMsg));
             throw new Exception(errMsg);
          }
       }
 
-      private void defOtherColumns(ExcelWorksheet ws, StructureService structService)
+      private void defOtherColumns()
       {
          string colName = string.Empty;
-         int col = _levelLast++;
+         int col = _levelLast+1;
          do
          {
-            colName = ws.Cells[1, col].Text.ToUpper();
+            colName = _ws.Cells[1, col].Text.ToUpper();
             if (string.IsNullOrEmpty(colName) )
             {
                break;
@@ -101,17 +106,17 @@ namespace ProjectsStructure.Model
                   break;
                default:
                   string errMsg = string.Format("Непредвиденный столбец на листе шаблона структуры {0} в файле {1}",
-                                    ws.Name, ws.Workbook.Properties.Title);
-                  structService.Inspector.AddError(new Errors.Error(errMsg));
+                                    _ws.Name, _ss.FileExceStructure);
+                  _ss.Inspector.AddError(new Errors.Error(errMsg));
                   break;
             }
             col++;
          } while (!string.IsNullOrEmpty(colName));
          // Проверка определенных столбцов
-         checkOtherDefColums(ws, structService);
+         checkOtherDefColums();
       }
 
-      private void checkOtherDefColums(ExcelWorksheet ws, StructureService structService)
+      private void checkOtherDefColums()
       {
          // Проверка определенных остальных столбцов
          string errColDef = string.Empty;
@@ -127,12 +132,12 @@ namespace ProjectsStructure.Model
          {
             errColDef += "'Ссылка' ";
          }
-         if (string.IsNullOrEmpty(errColDef))
+         if (!string.IsNullOrEmpty(errColDef))
          {
             string errMsg = string.Format(
                         "Не определены столбцы {0} на листе шаблона структуры {1} в файле {2}",
-                        errColDef, ws.Name, ws.Workbook.Properties.Title);
-            structService.Inspector.AddError(new Errors.Error(errMsg));
+                        errColDef, _ws.Name, _ss.FileExceStructure);
+            _ss.Inspector.AddError(new Errors.Error(errMsg));
             throw new Exception(errMsg);
          }
       }
