@@ -52,9 +52,18 @@ namespace ProjectsStructure.Model.ViewStructure
          foreach (var item in items)
          {
             TreeNode newNode = nodesCollection.Add(item.Name, item.Name);
+            //newNode.ImageIndex = getImageIndex(item);
             newNode.Tag = item;
             FillNode(item.ChildFolders.Values.ToList(), newNode);
          }
       }
+
+      //private int getImageIndex(FolderItem item)
+      //{
+      //   if (item.)
+      //   {
+
+      //   }
+      //}
    }
 }

@@ -31,6 +31,9 @@ namespace ProjectsStructure.Model
 
       public string Name { get { return _name; } }
       public int Level { get { return _level; } }
+      public bool IsLink { get { return !string.IsNullOrEmpty(_link); } }
+      public bool HasTemplate { get { return !string.IsNullOrEmpty(_template); } }
+      public bool HasInnerStructure { get { return !string.IsNullOrEmpty(_template); } }
 
       public FolderItem (string name, FolderItem fiParent, Structure s, StructureService ss, int row = 0)
       {

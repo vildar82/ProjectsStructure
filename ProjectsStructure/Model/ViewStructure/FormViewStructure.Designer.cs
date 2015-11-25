@@ -28,9 +28,12 @@
       /// </summary>
       private void InitializeComponent()
       {
+         this.components = new System.ComponentModel.Container();
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormViewStructure));
          this.label1 = new System.Windows.Forms.Label();
          this.comboBoxStructures = new System.Windows.Forms.ComboBox();
          this.treeViewStructure = new System.Windows.Forms.TreeView();
+         this.imageList1 = new System.Windows.Forms.ImageList(this.components);
          this.SuspendLayout();
          // 
          // label1
@@ -53,10 +56,22 @@
          // 
          // treeViewStructure
          // 
+         this.treeViewStructure.ImageIndex = 0;
+         this.treeViewStructure.ImageList = this.imageList1;
          this.treeViewStructure.Location = new System.Drawing.Point(12, 52);
          this.treeViewStructure.Name = "treeViewStructure";
+         this.treeViewStructure.SelectedImageIndex = 0;
          this.treeViewStructure.Size = new System.Drawing.Size(429, 413);
          this.treeViewStructure.TabIndex = 2;
+         // 
+         // imageList1
+         // 
+         this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+         this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+         this.imageList1.Images.SetKeyName(0, "folder.png");
+         this.imageList1.Images.SetKeyName(1, "link.png");
+         this.imageList1.Images.SetKeyName(2, "structure.png");
+         this.imageList1.Images.SetKeyName(3, "template.png");
          // 
          // FormViewStructure
          // 
@@ -78,5 +93,6 @@
       private System.Windows.Forms.Label label1;
       private System.Windows.Forms.ComboBox comboBoxStructures;
       private System.Windows.Forms.TreeView treeViewStructure;
+      private System.Windows.Forms.ImageList imageList1;
    }
 }
