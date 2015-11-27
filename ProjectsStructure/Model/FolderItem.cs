@@ -11,8 +11,15 @@ namespace ProjectsStructure.Model
    // Описание папки в структуре
    public class FolderItem
    {
+      public const string TypeNameFolder = "Папка";
+      public const string TypeNameStructure = "Структура";
+      public const string TypeNameTemplate = "Шаблон";
+      public const string TypeNameLink = "Ссылка";
+      public const string TypeNameUndefined = "Неопределено";
+
       private int _level; // уровень. 0 - корень; 1 первый уровень и т.д.
       private string _name; // имя папки
+      private EnumFolderItem _type;
       private string _template; // шаблон папки с правами доступа. Которые нужно назначить этой папке в структуре.
       private string _link; // ссылка
       private Structure _innerStructure; // вложенная структура - структура внутри этой папки
@@ -33,7 +40,10 @@ namespace ProjectsStructure.Model
       public int Level { get { return _level; } }
       public bool IsLink { get { return !string.IsNullOrEmpty(_link); } }
       public bool HasTemplate { get { return !string.IsNullOrEmpty(_template); } }
-      public bool HasInnerStructure { get { return !string.IsNullOrEmpty(_template); } }
+      public bool HasInnerStructure { get { return !string.IsNullOrEmpty(_innerStructureName); } }
+      public string InnerStructureName { get { return _innerStructureName; } }
+
+      public EnumFolderItem Type { get { return _type; } }
 
       public FolderItem (string name, FolderItem fiParent, Structure s, StructureService ss, int row = 0)
       {
@@ -91,9 +101,9 @@ namespace ProjectsStructure.Model
          // вложенная структура
          _innerStructureName = ws.Cells[row, structColums.Structure].Text;         
          // шаблон (прав доступа)
-         _template = ws.Cells[row, structColums.Template].Text;
+         _template =ws.Cells[row, structColums.Template].Text;
          // ссылка
-         _link = ws.Cells[row, structColums.Link].Text;
+         _link =ws.Cells[row, structColums.Link].Text;
          // проверка атрибутов
          checkAttributes(ws, row);
       }
@@ -104,6 +114,7 @@ namespace ProjectsStructure.Model
          // если определена ссылка, то не должно быть вложенной структуры и шаблона
          if (!string.IsNullOrEmpty(_link))
          {
+            _type = EnumFolderItem.Link;
             if (!string.IsNullOrEmpty(_innerStructureName) || 
                !string.IsNullOrEmpty(_template))
             {
@@ -112,39 +123,31 @@ namespace ProjectsStructure.Model
                            _name, row, ws.Name, _ss.FileExceStructure);
                _ss.Inspector.AddError(new Errors.Error(errMsg));
                hasErr = true;
-            }
-            // путь ссылки должен существовать
-            if (!Directory.Exists(_link))
+            }            
+         }
+
+         // Папка со вложенной структурой
+         if (!string.IsNullOrEmpty(_innerStructureName))
+         {            
+            _type = EnumFolderItem.Structure;
+            // имя вложенной структуры должно быть из списка структур
+            if (!_ss.Structures.Exists(s => string.Equals(s.Name, _innerStructureName, StringComparison.OrdinalIgnoreCase)))
             {
                string errMsg = string.Format(
-                  "Для папки {0} неверно задан атрибут ссылки {1} - путь не существует. Строка {2}, лист {3}, файл {4}",
-                  _name, _link, row, ws.Name, _ss.FileExceStructure);
+                   "Для папки {0} неверно задан атрибут структуры {1} - структуры не существует. Строка {2}, лист {3}, файл {4}",
+                   _name, _innerStructureName, row, ws.Name, _ss.FileExceStructure);
                _ss.Inspector.AddError(new Errors.Error(errMsg));
                hasErr = true;
             }
          }
 
-         // имя вложенной структуры должно быть из списка структур
-         if (!string.IsNullOrEmpty(_innerStructureName) &&
-            !_ss.Structures.Exists(s => string.Equals(s.Name, _innerStructureName, StringComparison.OrdinalIgnoreCase)))
+         // проверка шаблона
+         if (!string.IsNullOrEmpty(_template))
          {
-            string errMsg = string.Format(
-                "Для папки {0} неверно задан атрибут структуры {1} - такого имени листа структуры не существует. Строка {2}, лист {3}, файл {4}",
-                _name, _innerStructureName, row, ws.Name, _ss.FileExceStructure);
-            _ss.Inspector.AddError(new Errors.Error(errMsg));
-            hasErr = true;
+            _type = EnumFolderItem.Template;            
          }
 
-         // проверка шаблона
-         if (!string.IsNullOrEmpty(_template) &&
-            !Directory.Exists(_template))
-         {
-            string errMsg = string.Format(
-                  "Для папки {0} неверно задан атрибут шаблона {1} - путь не существует. Строка {2}, лист {3}, файл {4}",
-                  _name, _template, row, ws.Name, _ss.FileExceStructure);
-            _ss.Inspector.AddError(new Errors.Error(errMsg));
-            hasErr = true;
-         }
+         // По умолчанию папка считается простой - EnumFolderItem.Folder
 
          if (hasErr)
          {
@@ -152,6 +155,47 @@ namespace ProjectsStructure.Model
                "Ошибка при определении атрибутов папки {0}. Строка {2}, лист {3}, файл {4}",
                _name, _innerStructureName, row, ws.Name, _ss.FileExceStructure));
          }
-      }      
+      }
+
+      public void CheckInnerStructure()
+      {
+         // подстановка структур
+         foreach (var fiItem  in _childFolder)
+         {
+            if (fiItem.Value.HasInnerStructure)
+            {
+               var innerStructure = _ss.Structures.Find(s => s.Name == fiItem.Value.InnerStructureName);
+               if (innerStructure != null)
+               {
+                  fiItem.Value.setInnerStructure(innerStructure);
+               }
+            }
+            fiItem.Value.CheckInnerStructure();
+         }
+      }
+
+      private void setInnerStructure(Structure innerStructure)
+      {
+         //присвоение вложенной структуры
+         _innerStructure = innerStructure;
+         // TODO: если есть дочерние папки, проверить конфликт имен со структурой.
+      }
+
+      public string GetTypeName()
+      {
+         switch (_type)
+         {
+            case EnumFolderItem.Folder:
+               return TypeNameFolder;
+            case EnumFolderItem.Link:
+               return TypeNameLink;
+            case EnumFolderItem.Structure:
+               return TypeNameStructure;
+            case EnumFolderItem.Template:
+               return TypeNameTemplate;
+            default:
+               return TypeNameUndefined;
+         }
+      }
    }
 }

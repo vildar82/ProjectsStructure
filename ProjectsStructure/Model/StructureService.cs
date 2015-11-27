@@ -63,6 +63,11 @@ namespace ProjectsStructure.Model
                }
             }
             errorStructures.ForEach(s => _structures.Remove(s));
+            // проверка структур, подстановка вложенных структур
+            foreach (var structure in _structures)
+            {
+               structure.Root.CheckInnerStructure();
+            }
          }
 
          if (_inspector.HasError)

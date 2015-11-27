@@ -14,6 +14,7 @@ namespace ProjectsStructure
       [STAThread]
       static void Main()
       {
+         Log.Info("Запуск программы");
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
          Application.Run(new FormStructure());         

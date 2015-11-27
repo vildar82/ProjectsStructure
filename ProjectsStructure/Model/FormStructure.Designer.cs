@@ -37,6 +37,8 @@
          this.comboBoxStructures = new System.Windows.Forms.ComboBox();
          this.label2 = new System.Windows.Forms.Label();
          this.buttonViewStructures = new System.Windows.Forms.Button();
+         this.buttonTestLink = new System.Windows.Forms.Button();
+         this.buttonTestAcces = new System.Windows.Forms.Button();
          this.SuspendLayout();
          // 
          // textBoxExcelFileStructure
@@ -104,11 +106,33 @@
          this.buttonViewStructures.UseVisualStyleBackColor = true;
          this.buttonViewStructures.Click += new System.EventHandler(this.buttonViewStructures_Click);
          // 
+         // buttonTestLink
+         // 
+         this.buttonTestLink.Location = new System.Drawing.Point(469, 91);
+         this.buttonTestLink.Name = "buttonTestLink";
+         this.buttonTestLink.Size = new System.Drawing.Size(126, 23);
+         this.buttonTestLink.TabIndex = 6;
+         this.buttonTestLink.Text = "Test Link Form";
+         this.buttonTestLink.UseVisualStyleBackColor = true;
+         this.buttonTestLink.Click += new System.EventHandler(this.button1_Click);
+         // 
+         // buttonTestAcces
+         // 
+         this.buttonTestAcces.Location = new System.Drawing.Point(469, 120);
+         this.buttonTestAcces.Name = "buttonTestAcces";
+         this.buttonTestAcces.Size = new System.Drawing.Size(126, 23);
+         this.buttonTestAcces.TabIndex = 7;
+         this.buttonTestAcces.Text = "Test Access Folder";
+         this.buttonTestAcces.UseVisualStyleBackColor = true;
+         this.buttonTestAcces.Click += new System.EventHandler(this.buttonTestAcces_Click);
+         // 
          // FormStructure
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(607, 320);
+         this.Controls.Add(this.buttonTestAcces);
+         this.Controls.Add(this.buttonTestLink);
          this.Controls.Add(this.buttonViewStructures);
          this.Controls.Add(this.comboBoxStructures);
          this.Controls.Add(this.buttonRead);
@@ -133,6 +157,8 @@
       private System.Windows.Forms.ComboBox comboBoxStructures;
       private System.Windows.Forms.Label label2;
       private System.Windows.Forms.Button buttonViewStructures;
+      private System.Windows.Forms.Button buttonTestLink;
+      private System.Windows.Forms.Button buttonTestAcces;
    }
 }
 

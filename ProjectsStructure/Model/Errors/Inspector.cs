@@ -22,6 +22,7 @@ namespace ProjectsStructure.Model.Errors
       public void AddError (Error error)
       {
          _errors.Add(error);
+         Log.Info(error.Message);
       }      
 
       public void Show()

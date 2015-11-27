@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\EnumFolderItem.cs" />
     <Compile Include="Model\Errors\Error.cs" />
     <Compile Include="Model\Errors\FormErrors.cs">
       <SubType>Form</SubType>
@@ -69,7 +70,9 @@
     <Compile Include="Model\FormStructure.Designer.cs">
       <DependentUpon>FormStructure.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Lib\FolderExt.cs" />
     <Compile Include="Model\Lib\StringExt.cs" />
+    <Compile Include="Model\Lib\SymbolicLink.cs" />
     <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Structure.cs" />
     <Compile Include="Model\StructureService.cs" />
@@ -81,6 +84,24 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test\FormTestFolderAccessCopy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test\FormTestFolderAccessCopy.Designer.cs">
+      <DependentUpon>FormTestFolderAccessCopy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Test\FormTestLink.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test\FormTestLink.Designer.cs">
+      <DependentUpon>FormTestLink.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Test\FormTestFolderAccessCopy.resx">
+      <DependentUpon>FormTestFolderAccessCopy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Test\FormTestLink.resx">
+      <DependentUpon>FormTestLink.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Resources\template.png" />
     <None Include="Resources\structure.png" />
     <None Include="Resources\link.png" />

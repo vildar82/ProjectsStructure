@@ -34,6 +34,7 @@
          this.comboBoxStructures = new System.Windows.Forms.ComboBox();
          this.treeViewStructure = new System.Windows.Forms.TreeView();
          this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+         this.labelInfo = new System.Windows.Forms.Label();
          this.SuspendLayout();
          // 
          // label1
@@ -63,6 +64,7 @@
          this.treeViewStructure.SelectedImageIndex = 0;
          this.treeViewStructure.Size = new System.Drawing.Size(429, 413);
          this.treeViewStructure.TabIndex = 2;
+         this.treeViewStructure.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewStructure_AfterSelect);
          // 
          // imageList1
          // 
@@ -73,11 +75,20 @@
          this.imageList1.Images.SetKeyName(2, "structure.png");
          this.imageList1.Images.SetKeyName(3, "template.png");
          // 
+         // labelInfo
+         // 
+         this.labelInfo.AutoSize = true;
+         this.labelInfo.Location = new System.Drawing.Point(12, 476);
+         this.labelInfo.Name = "labelInfo";
+         this.labelInfo.Size = new System.Drawing.Size(0, 13);
+         this.labelInfo.TabIndex = 3;
+         // 
          // FormViewStructure
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(704, 474);
+         this.ClientSize = new System.Drawing.Size(454, 498);
+         this.Controls.Add(this.labelInfo);
          this.Controls.Add(this.treeViewStructure);
          this.Controls.Add(this.comboBoxStructures);
          this.Controls.Add(this.label1);
@@ -94,5 +105,6 @@
       private System.Windows.Forms.ComboBox comboBoxStructures;
       private System.Windows.Forms.TreeView treeViewStructure;
       private System.Windows.Forms.ImageList imageList1;
+      private System.Windows.Forms.Label labelInfo;
    }
 }

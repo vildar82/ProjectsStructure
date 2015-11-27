@@ -135,7 +135,7 @@ namespace ProjectsStructure.Model
             throw new Exception(errMsg);
          }
          return fiRes;
-      }
+      }      
 
       private FolderItem getFolderOnLevel(int iCol, string valFolder, FolderItem fiParent)
       {

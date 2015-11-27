@@ -9,6 +9,10 @@ namespace ProjectsStructure.Model
 {
    public class ExcelStructureColumns
    {
+      public const string ColumnStructure = "Структура";
+      public const string ColumnTemplate = "Шаблон";
+      public const string ColumnLink = "Ссылка";
+
       private int _levelFirst;
       private int _levelLast;
       private int _structure;
@@ -88,27 +92,29 @@ namespace ProjectsStructure.Model
          int col = _levelLast+1;
          do
          {
-            colName = _ws.Cells[1, col].Text.ToUpper();
+            colName = _ws.Cells[1, col].Text;
             if (string.IsNullOrEmpty(colName) )
             {
                break;
             }
-            switch (colName)
+            if (string.Equals (colName, ColumnStructure, StringComparison.OrdinalIgnoreCase) )
             {
-               case "СТРУКТУРА":
-                  _structure = col;
-                  break;
-               case "ШАБЛОН":
-                  _template = col;
-                  break;
-               case "ССЫЛКА":
-                  _link = col;
-                  break;
-               default:
-                  string errMsg = string.Format("Непредвиденный столбец на листе шаблона структуры {0} в файле {1}",
+               _structure = col;
+            }
+            else if (string.Equals(colName, ColumnTemplate, StringComparison.OrdinalIgnoreCase))
+            {
+               _template = col;
+            }
+            else if (string.Equals(colName, ColumnLink, StringComparison.OrdinalIgnoreCase))
+            {
+               _link = col;
+            }
+            else
+            {
+               string errMsg = string.Format("Непредвиденный столбец на листе шаблона структуры {0} в файле {1}",
                                     _ws.Name, _ss.FileExceStructure);
-                  _ss.Inspector.AddError(new Errors.Error(errMsg));
-                  break;
+               _ss.Inspector.AddError(new Errors.Error(errMsg));
+               break;
             }
             col++;
          } while (!string.IsNullOrEmpty(colName));
@@ -122,15 +128,15 @@ namespace ProjectsStructure.Model
          string errColDef = string.Empty;
          if (_structure == 0)
          {
-            errColDef += "'Структура' ";
+            errColDef += string.Format("'{0}' ",  ColumnStructure);// "'Структура' ";
          }
          if (_template == 0)
          {
-            errColDef += "'Шаблон' ";
+            errColDef += string.Format("'{0}' ", ColumnTemplate);// "'Шаблон' ";            
          }
          if (_link == 0)
          {
-            errColDef += "'Ссылка' ";
+            errColDef += string.Format("'{0}' ", ColumnLink);// "'Ссылка' ";                        
          }
          if (!string.IsNullOrEmpty(errColDef))
          {
