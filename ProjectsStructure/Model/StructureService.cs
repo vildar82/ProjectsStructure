@@ -7,36 +7,41 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using OfficeOpenXml;
 using ProjectsStructure.Model.Errors;
+using ProjectsStructure.Model.Structures;
+using ProjectsStructure.Properties;
 
 namespace ProjectsStructure.Model
 {
    public class StructureService
-   {      
-      private List<Structure> _structures;
-      private Inspector _inspector;
-      private string _fileExceStructure;  
+   {
+      public List<StructureTemplate> StructureTemplates { get; private set; }
+      public Inspector Inspector { get; private set; }                  
 
-      public List<Structure> Structures { get { return _structures; } }
-      public Inspector Inspector { get { return _inspector; } }
-      public string FileExceStructure { get { return _fileExceStructure; } }
+      /// <summary>
+      /// Считывание файла конфигурации
+      /// Считывание существующих проектов в Share и WIP
+      /// </summary>
+      public void Initialize()
+      {
+         Inspector = new Inspector();
+         StructureTemplates = new List<StructureTemplate>();
+         // проверка настроек
+      }
 
       // считывание шаблонов структур из файла Excel
-      public void ReadStructuresFromExcel(string fileExcelStructure)
+      private void ReadStructuresFromExcel()
       {
-         if (!File.Exists(fileExcelStructure))
+         if (!File.Exists(Settings.Default.StructureExcelFile))
          {
-            MessageBox.Show(string.Format("Не найден файл шаблонов структур - {0}", fileExcelStructure));
-            Log.Error("Не найден файл шаблонов структур - {0}", fileExcelStructure);
+            MessageBox.Show(string.Format("Не найден файл шаблонов структур - {0}", Settings.Default.StructureExcelFile));
+            Log.Error("Не найден файл шаблонов структур - {0}", Settings.Default.StructureExcelFile);
             return;
-         }
-         _fileExceStructure = fileExcelStructure;
-         _structures = new List<Structure>();
-         _inspector = new Inspector();
+         }                  
 
          // Открытие файла Excel
          using (ExcelPackage excelStructure = new ExcelPackage())
          {
-            using (var stream = File.OpenRead(fileExcelStructure))
+            using (var stream = File.OpenRead(Settings.Default.StructureExcelFile))
             {
                excelStructure.Load(stream);
             }
@@ -45,12 +50,12 @@ namespace ProjectsStructure.Model
             {
                if (ws.Name.StartsWith("{"))
                {
-                  Structure structure = new Structure(ws, this);
-                  _structures.Add(structure);
+                  var structure = new StructureTemplate(ws, this);
+                  StructureTemplates.Add(structure);
                }
             }
-            List<Structure> errorStructures = new List<Structure>();
-            foreach (var structure in _structures)
+            List<StructureTemplate> errorStructures = new List<StructureTemplate>();
+            foreach (var structure in StructureTemplates)
             {            
                try
                {
@@ -58,22 +63,22 @@ namespace ProjectsStructure.Model
                }
                catch (Exception ex)
                {
-                  Log.Error(ex, "Ошибка чтения лтиста шаблона структуры {0} из файла {1}", structure.Name, fileExcelStructure);
+                  Log.Error(ex, "Ошибка чтения лтиста шаблона структуры {0} из файла {1}", structure.Name, Settings.Default.StructureExcelFile);
                   errorStructures.Add(structure);
                }
             }
-            errorStructures.ForEach(s => _structures.Remove(s));
+            errorStructures.ForEach(s => StructureTemplates.Remove(s));
             // проверка структур, подстановка вложенных структур
-            foreach (var structure in _structures)
+            foreach (var structure in StructureTemplates)
             {
-               structure.Root.CheckInnerStructure();
+               ((FolderItemTemplate)structure.Root).CheckInnerStructure();
             }
          }
 
-         if (_inspector.HasError)
+         if (Inspector.HasError)
          {
-            _inspector.Show();
-            _inspector.Clear();
+            Inspector.Show();
+            Inspector.Clear();
          }         
       }
    }

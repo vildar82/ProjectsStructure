@@ -7,16 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ProjectsStructure.Model.Structures;
 
 namespace ProjectsStructure.Model.ViewStructure
 {
    public partial class FormViewStructure : Form
    {
-      private StructureService _ss;
+      private StructureService ss;
 
       public FormViewStructure(StructureService ss)
       {
-         _ss = ss;
+         this.ss = ss;
          InitializeComponent();
 
          Rebinding();
@@ -25,7 +26,7 @@ namespace ProjectsStructure.Model.ViewStructure
       private void Rebinding()
       {
          comboBoxStructures.DataSource = null;
-         comboBoxStructures.DataSource = _ss.Structures;
+         comboBoxStructures.DataSource = ss.StructureTemplates;
       }
 
       private void comboBoxStructures_SelectedIndexChanged(object sender, EventArgs e)
@@ -37,7 +38,7 @@ namespace ProjectsStructure.Model.ViewStructure
       {
          treeViewStructure.Nodes.Clear();
 
-         Structure s = comboBoxStructures.SelectedItem as Structure;
+         StructureTemplate s = comboBoxStructures.SelectedItem as StructureTemplate;
          if (s == null) return;
 
          FillNode(s.Root.ChildFolders.Values.ToList(), null);
@@ -51,9 +52,10 @@ namespace ProjectsStructure.Model.ViewStructure
 
          foreach (var item in items)
          {
+            FolderItemTemplate fiItem = (FolderItemTemplate)item;
             TreeNode newNode = nodesCollection.Add(item.Name, item.Name);
-            newNode.ImageIndex = (int)item.Type;
-            newNode.SelectedImageIndex = (int)item.Type;
+            newNode.ImageIndex = (int)fiItem.Type;
+            newNode.SelectedImageIndex = (int)fiItem.Type;
             newNode.Tag = item;
             FillNode(item.ChildFolders.Values.ToList(), newNode);
          }
@@ -61,7 +63,7 @@ namespace ProjectsStructure.Model.ViewStructure
 
       private void treeViewStructure_AfterSelect(object sender, TreeViewEventArgs e)
       {
-         FolderItem fiSelect = e.Node.Tag as FolderItem;
+         FolderItemTemplate fiSelect = e.Node.Tag as FolderItemTemplate;
          labelInfo.Text = fiSelect.GetTypeName();
       }
    }

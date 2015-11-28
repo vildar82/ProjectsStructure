@@ -19,8 +19,8 @@ namespace ProjectsStructure.Model
       private int _template;
       private int _link;
 
-      private ExcelWorksheet _ws;
-      private StructureService _ss;
+      private ExcelWorksheet ws;
+      private StructureService ss;
 
       public int LevelFirst { get { return _levelFirst; } }
       public int LevelLast { get { return _levelLast; } }
@@ -30,8 +30,8 @@ namespace ProjectsStructure.Model
 
       public ExcelStructureColumns(ExcelWorksheet ws, StructureService ss)
       {
-         _ws = ws;
-         _ss = ss;
+         this.ws = ws;
+         this.ss = ss;
          // определение первого и последнего столбца уровня
          defLevelColumns();         
          // определение остальных столбццов
@@ -45,7 +45,7 @@ namespace ProjectsStructure.Model
          int col = 1;
          do
          {
-            colName = _ws.Cells[1, col].Text;
+            colName = ws.Cells[1, col].Text;
             if (colName.StartsWith("Уровень", StringComparison.OrdinalIgnoreCase))
             {
                if (_levelFirst == 0)
@@ -80,8 +80,8 @@ namespace ProjectsStructure.Model
             }
             string errMsg = string.Format(
                      "Не определен {0} столбец уровней на листе шаблона структуры {1} в файле {2}",
-                     errColDef, _ws.Name, _ss.FileExceStructure);
-            _ss.Inspector.AddError(new Errors.Error(errMsg));
+                     errColDef, ws.Name, Properties.Settings.Default.StructureExcelFile);
+            ss.Inspector.AddError(new Errors.Error(errMsg));
             throw new Exception(errMsg);
          }
       }
@@ -92,7 +92,7 @@ namespace ProjectsStructure.Model
          int col = _levelLast+1;
          do
          {
-            colName = _ws.Cells[1, col].Text;
+            colName = ws.Cells[1, col].Text;
             if (string.IsNullOrEmpty(colName) )
             {
                break;
@@ -112,8 +112,8 @@ namespace ProjectsStructure.Model
             else
             {
                string errMsg = string.Format("Непредвиденный столбец на листе шаблона структуры {0} в файле {1}",
-                                    _ws.Name, _ss.FileExceStructure);
-               _ss.Inspector.AddError(new Errors.Error(errMsg));
+                                    ws.Name, Properties.Settings.Default.StructureExcelFile);
+               ss.Inspector.AddError(new Errors.Error(errMsg));
                break;
             }
             col++;
@@ -142,8 +142,8 @@ namespace ProjectsStructure.Model
          {
             string errMsg = string.Format(
                         "Не определены столбцы {0} на листе шаблона структуры {1} в файле {2}",
-                        errColDef, _ws.Name, _ss.FileExceStructure);
-            _ss.Inspector.AddError(new Errors.Error(errMsg));
+                        errColDef, ws.Name, Properties.Settings.Default.StructureExcelFile);
+            ss.Inspector.AddError(new Errors.Error(errMsg));
             throw new Exception(errMsg);
          }
       }
