@@ -26,7 +26,7 @@ namespace ProjectsStructure.Model.ViewStructure
       private void Rebinding()
       {
          comboBoxStructures.DataSource = null;
-         comboBoxStructures.DataSource = ss.StructureTemplates;
+         comboBoxStructures.DataSource = ss.STC.StructureTemplates;
       }
 
       private void comboBoxStructures_SelectedIndexChanged(object sender, EventArgs e)

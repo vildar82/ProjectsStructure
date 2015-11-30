@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,14 +41,14 @@ namespace ProjectsStructure.Model.Structures
                {
                   string errMsg = string.Format(
                      "Структура {0} - пустая. Лист {1}, файл {2}",
-                     Name, ws.Name, Settings.Default.StructureExcelFile);
+                     Name, ws.Name, SS.STC.ExcelFileTemplates);
                   SS.Inspector.AddError(new Error(errMsg));
                   throw new Exception(errMsg);
                }
                break;
             }
             // определение вложенной Структуры/ Шаблона / Ссылки
-            fi.DefAttributes(ws, colums, row);
+            fi.DefAttributes(ws, colums);
             fiParent = fi;
             row++;
          } while (fiParent != null);
@@ -65,7 +66,7 @@ namespace ProjectsStructure.Model.Structures
             {
                valLast = valFolder;
                // проверка есть ли такая папка в родительской на данном уровне или нет, тогда создание нового пути.               
-               var fiCur = getFolderOnLevel(iCol, valFolder, fiParent);
+               FolderItemTemplate fiCur = getFolderOnLevel(iCol, valFolder, fiParent);
                if (fiCur == null)
                {
                   if (fiLast == null)
@@ -81,7 +82,7 @@ namespace ProjectsStructure.Model.Structures
                      // ошибка в строке определено больше одного пути.
                      string errMsg = string.Format(
                         "В строке {0} определено две папки - {1} и {2}. Лист {3}, файл {4}",
-                        row, fiRes.Name, valFolder, ws.Name, Settings.Default.StructureExcelFile);
+                        row, fiRes.Name, valFolder, ws.Name, SS.STC.ExcelFileTemplates);
                      SS.Inspector.AddError(new Error(errMsg));
                      throw new Exception(errMsg);
                   }
@@ -104,11 +105,16 @@ namespace ProjectsStructure.Model.Structures
          if (fiRes == null && !string.IsNullOrEmpty(valLast))
          {
             string errMsg = string.Format("Не определена новая папка структуры в строке {0} - лист {1}, файл {2}",
-                                       row, ws.Name, Settings.Default.StructureExcelFile);
+                                       row, ws.Name, SS.STC.ExcelFileTemplates);
             SS.Inspector.AddError(new Error(errMsg));
             throw new Exception(errMsg);
          }
          return fiRes;
+      }
+
+      public void CheckInnerStructure()
+      {
+         ((FolderItemTemplate)Root).CheckInnerStructure();
       }
 
       private FolderItemTemplate getFolderOnLevel(int iCol, string valFolder, FolderItemTemplate fiParent)
@@ -116,7 +122,7 @@ namespace ProjectsStructure.Model.Structures
          // проверка наличия папки на уровне
          FolderItemTemplate res = null;
          // поиск уровня         
-         var fiVal = (FolderItemTemplate)fiParent.GetFolderPathLevel(iCol);
+         FolderItemTemplate fiVal = (FolderItemTemplate)fiParent.GetFolderPathLevel(iCol);
          if (fiVal != null)
          {
             if (string.IsNullOrEmpty(valFolder))
@@ -132,6 +138,6 @@ namespace ProjectsStructure.Model.Structures
             }
          }
          return res;
-      }
+      }      
    }
 }

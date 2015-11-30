@@ -54,9 +54,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Code\Config.cs" />
     <Compile Include="App_Code\Expansive.cs" />
-    <Compile Include="Model\EnumFolderItem.cs" />
+    <Compile Include="Model\Config\SerializerXml.cs" />
+    <Compile Include="Model\Config\Settings.cs" />
+    <Compile Include="Model\Config\Variable.cs" />
+    <Compile Include="Model\Structures\EnumFolderItem.cs" />
     <Compile Include="Model\Errors\Error.cs" />
     <Compile Include="Model\Errors\FormErrors.cs">
       <SubType>Form</SubType>
@@ -65,7 +67,7 @@
       <DependentUpon>FormErrors.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Errors\Inspector.cs" />
-    <Compile Include="Model\ExcelStructureColumns.cs" />
+    <Compile Include="Model\Structures\Template\ExcelStructureColumns.cs" />
     <Compile Include="Model\Structures\FolderItem.cs" />
     <Compile Include="Model\FormStructure.cs">
       <SubType>Form</SubType>
@@ -81,8 +83,9 @@
     <Compile Include="Model\StructureService.cs" />
     <Compile Include="Model\Structures\Template\FolderItemTemplate.cs" />
     <Compile Include="Model\Structures\Template\StructureTemplate.cs" />
+    <Compile Include="Model\Structures\Template\StructureTemplateCollection.cs" />
     <Compile Include="Model\Structures\Template\TemplateFolderAcces.cs" />
-    <Compile Include="Model\Structures\Template\TemplateLink.cs" />
+    <Compile Include="Model\Structures\Link.cs" />
     <Compile Include="Model\ViewStructure\FormViewStructure.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,15 +143,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

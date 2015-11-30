@@ -8,32 +8,31 @@ namespace ProjectsStructure.Model.Errors
 {
    public class Inspector
    {
-      private List<Error> _errors;
-
       public Inspector()
       {
-         _errors = new List<Error>();
+         Errors = new List<Error>();
       }
 
-      public List<Error> Errors { get { return _errors; } }
+      public List<Error> Errors { get; private set; }
 
-      public bool HasError { get { return _errors.Count > 0; } }
+      public bool HasError { get { return Errors.Count > 0; } }
 
       public void AddError (Error error)
       {
-         _errors.Add(error);
-         Log.Info(error.Message);
+         Errors.Add(error);         
       }      
 
       public void Show()
       {
+         string errMsgs = string.Join(";\n", Errors);
+         Log.Error(errMsgs);
          FormErrors formErr = new FormErrors(this);
          formErr.Show();
       }
 
       public void Clear()
       {
-         _errors = new List<Error>();
+         Errors = new List<Error>();
       }
    }
 }

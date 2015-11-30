@@ -80,7 +80,7 @@ namespace ProjectsStructure.Model
             }
             string errMsg = string.Format(
                      "Не определен {0} столбец уровней на листе шаблона структуры {1} в файле {2}",
-                     errColDef, ws.Name, Properties.Settings.Default.StructureExcelFile);
+                     errColDef, ws.Name, ss.STC.ExcelFileTemplates);
             ss.Inspector.AddError(new Errors.Error(errMsg));
             throw new Exception(errMsg);
          }
@@ -112,7 +112,7 @@ namespace ProjectsStructure.Model
             else
             {
                string errMsg = string.Format("Непредвиденный столбец на листе шаблона структуры {0} в файле {1}",
-                                    ws.Name, Properties.Settings.Default.StructureExcelFile);
+                                    ws.Name, ss.STC.ExcelFileTemplates);
                ss.Inspector.AddError(new Errors.Error(errMsg));
                break;
             }
@@ -142,7 +142,7 @@ namespace ProjectsStructure.Model
          {
             string errMsg = string.Format(
                         "Не определены столбцы {0} на листе шаблона структуры {1} в файле {2}",
-                        errColDef, ws.Name, Properties.Settings.Default.StructureExcelFile);
+                        errColDef, ws.Name, ss.STC.ExcelFileTemplates);
             ss.Inspector.AddError(new Errors.Error(errMsg));
             throw new Exception(errMsg);
          }

@@ -10,7 +10,7 @@ namespace ProjectsStructure.Model
    {
       Folder,
       Link,
-      Structure,
-      Template
+      Structure, // только для шаблоннной структуры
+      Template // только для шаблоннной структуры
    }
 }

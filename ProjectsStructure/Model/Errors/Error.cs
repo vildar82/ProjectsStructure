@@ -7,26 +7,31 @@ using System.Threading.Tasks;
 namespace ProjectsStructure.Model.Errors
 {
    public class Error
-   {
-      private string _message;
-      private string _shortMsg;
+   {      
+      private string shortMsg;
       
       public Error(string message)
       {
-         _message = message;
+         Message = message;
       }
 
-      public string Message { get { return _message; } }
+      public string Message { get; private set; }
+
       public string ShortMsg
       {
          get
          {
-            if(_shortMsg== null)
+            if(shortMsg== null)
             {
-               _shortMsg = _message.Substring(0, 100);
+               shortMsg = Message.Substring(0, 100);
             }
-            return _shortMsg;
+            return shortMsg;
          }
+      }
+
+      public override string ToString()
+      {
+         return Message;
       }
    }
 }
