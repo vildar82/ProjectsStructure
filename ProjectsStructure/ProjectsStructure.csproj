@@ -67,6 +67,10 @@
       <DependentUpon>FormErrors.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Errors\Inspector.cs" />
+    <Compile Include="Model\Structures\Live\FolderItemLive.cs" />
+    <Compile Include="Model\Structures\Live\ProjectsCollection.cs" />
+    <Compile Include="Model\Structures\Live\ProjectShare.cs" />
+    <Compile Include="Model\Structures\Live\StructureLive.cs" />
     <Compile Include="Model\Structures\Template\ExcelStructureColumns.cs" />
     <Compile Include="Model\Structures\FolderItem.cs" />
     <Compile Include="Model\FormStructure.cs">
@@ -84,13 +88,25 @@
     <Compile Include="Model\Structures\Template\FolderItemTemplate.cs" />
     <Compile Include="Model\Structures\Template\StructureTemplate.cs" />
     <Compile Include="Model\Structures\Template\StructureTemplateCollection.cs" />
-    <Compile Include="Model\Structures\Template\TemplateFolderAcces.cs" />
+    <Compile Include="Model\Structures\Template\TemplateAcces.cs" />
     <Compile Include="Model\Structures\Link.cs" />
-    <Compile Include="Model\ViewStructure\FormViewStructure.cs">
+    <Compile Include="Model\Structures\FormViewStructure.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Model\ViewStructure\FormViewStructure.Designer.cs">
+    <Compile Include="Model\Structures\FormViewStructure.Designer.cs">
       <DependentUpon>FormViewStructure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Structures\Template\View\FormViewAccess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Model\Structures\Template\View\FormViewAccess.Designer.cs">
+      <DependentUpon>FormViewAccess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Structures\Template\View\FormViewTemplates.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Model\Structures\Template\View\FormViewTemplates.Designer.cs">
+      <DependentUpon>FormViewTemplates.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,6 +123,12 @@
       <DependentUpon>FormTestLink.cs</DependentUpon>
     </Compile>
     <Compile Include="Test\TestExpansion.cs" />
+    <EmbeddedResource Include="Model\Structures\Template\View\FormViewAccess.resx">
+      <DependentUpon>FormViewAccess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\Structures\Template\View\FormViewTemplates.resx">
+      <DependentUpon>FormViewTemplates.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Test\FormTestFolderAccessCopy.resx">
       <DependentUpon>FormTestFolderAccessCopy.cs</DependentUpon>
     </EmbeddedResource>
@@ -123,7 +145,7 @@
     <EmbeddedResource Include="Model\FormStructure.resx">
       <DependentUpon>FormStructure.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Model\ViewStructure\FormViewStructure.resx">
+    <EmbeddedResource Include="Model\Structures\FormViewStructure.resx">
       <DependentUpon>FormViewStructure.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -158,9 +180,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Structures\Live\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

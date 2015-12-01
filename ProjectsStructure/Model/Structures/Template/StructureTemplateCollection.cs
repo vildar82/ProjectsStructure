@@ -13,19 +13,23 @@ namespace ProjectsStructure.Model.Structures.Template
    public class StructureTemplateCollection
    {
       public StructureService SS { get; private set; }
-      public List<StructureTemplate> StructureTemplates { get; private set; }
+      public List<Structure> StructureTemplates { get; private set; }
       public string ExcelFileTemplates { get; private set; }
+      public List<TemplateAccess> TemplatesAccess { get; private set; }
 
       public StructureTemplateCollection(StructureService ss)
       {
          SS = ss;
-         StructureTemplates = new List<StructureTemplate>();
-         ExcelFileTemplates = Settings.Instance.ExcelFileTemplates;
+         StructureTemplates = new List<Structure>();
+         ExcelFileTemplates = Settings.Instance.TemplatesExcelFile;
       }
 
       // считывание шаблонов структур из файла Excel
       public void ReadStructuresFromExcel()
       {
+         // считывание шаблонов прав для папок
+         TemplatesAccess = TemplateAccess.GetTemplatesAccess(SS);
+
          if (!File.Exists(ExcelFileTemplates))
          {
             string errMsg = string.Format("Не найден файл шаблонов структур - {0}", ExcelFileTemplates);
@@ -38,14 +42,14 @@ namespace ProjectsStructure.Model.Structures.Template
          {
             try
             {
-               using (var stream = File.OpenRead(Settings.Instance.ExcelFileTemplates))
+               using (var stream = File.OpenRead(Settings.Instance.TemplatesExcelFile))
                {
                   excelStructure.Load(stream);
                }
             }
             catch (Exception ex)
             {
-               string errMsg = string.Format("Не удалось прочитать файл Excel {0} - {1}", Settings.Instance.ExcelFileTemplates, ex);
+               string errMsg = string.Format("Не удалось прочитать файл Excel {0} - {1}", Settings.Instance.TemplatesExcelFile, ex);
                SS.Inspector.AddError(new Error(errMsg));
                return;
             }
@@ -58,16 +62,16 @@ namespace ProjectsStructure.Model.Structures.Template
                   StructureTemplates.Add(structure);
                }
             }
-            List<StructureTemplate> errorStructures = new List<StructureTemplate>();
+            List<Structure> errorStructures = new List<Structure>();
             foreach (var structure in StructureTemplates)
             {
                try
                {
-                  structure.ReadSheet();
+                  ((StructureTemplate)structure).ReadSheet();
                }
                catch (Exception ex)
                {
-                  Log.Error(ex, "Ошибка чтения лтиста шаблона структуры {0} из файла {1}", structure.Name, Settings.Instance.ExcelFileTemplates);
+                  Log.Error(ex, "Ошибка чтения лтиста шаблона структуры {0} из файла {1}", structure.Name, Settings.Instance.TemplatesExcelFile);
                   errorStructures.Add(structure);
                }
             }
@@ -75,6 +79,6 @@ namespace ProjectsStructure.Model.Structures.Template
 
             //TODO: Проверка вложенных структур - проверка дублирования имен в папках после раскрытия вложенных структур.
          }
-      }
+      }      
    }
 }

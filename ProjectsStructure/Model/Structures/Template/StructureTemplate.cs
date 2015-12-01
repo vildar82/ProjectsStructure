@@ -15,17 +15,25 @@ namespace ProjectsStructure.Model.Structures
       private ExcelWorksheet ws;
       private ExcelStructureColumns colums;
 
+      public List<FolderItemTemplate> Objects { get; private set; }
+
       public StructureTemplate(ExcelWorksheet sheet, StructureService ss) :
          base (sheet.Name, ss)
       {         
-         ws = sheet;
-      }      
+         ws = sheet;         
+      }
+
+      public override string ToString()
+      {
+         return Name;
+      }
 
       public void ReadSheet()
       {
+         Objects = new List<FolderItemTemplate>();
          Root = new FolderItemTemplate(ws.Name, null, this); // корень структуры         
          // считывание заголовков столбцов - уровни/Структура/Шаблон/Ссылка
-         colums = new ExcelStructureColumns(ws, SS);
+         colums = new ExcelStructureColumns(ws, SS);         
 
          int row = 2; // начальная строчка (1 - шапка)         
          // определение папки                  

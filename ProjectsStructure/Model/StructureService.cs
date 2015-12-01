@@ -9,6 +9,7 @@ using OfficeOpenXml;
 using ProjectsStructure.Model.Config;
 using ProjectsStructure.Model.Errors;
 using ProjectsStructure.Model.Structures;
+using ProjectsStructure.Model.Structures.Live;
 using ProjectsStructure.Model.Structures.Template;
 using ProjectsStructure.Properties;
 
@@ -16,6 +17,7 @@ namespace ProjectsStructure.Model
 {
    public class StructureService
    {
+      public ProjectsCollection Projects { get; private set; }
       public StructureTemplateCollection STC { get; private set; }
       public Inspector Inspector { get; private set; }                        
 
@@ -31,7 +33,11 @@ namespace ProjectsStructure.Model
          CheckSettings();
          // считывание шаблонов структур
          STC = new StructureTemplateCollection(this);         
-         STC.ReadStructuresFromExcel();         
+         STC.ReadStructuresFromExcel();
+
+         //считывание проектов в Share
+         Projects = new ProjectsCollection(this);
+         Projects.ReadProjects();
 
          if (Inspector.HasError)
          {

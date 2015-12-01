@@ -139,7 +139,14 @@ namespace ProjectsStructure.Model.Lib
                   {
                      return null;
                   }
-                  Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                  try
+                  {
+                     Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                  }
+                  catch (Exception ex)
+                  {
+                     string msg = ex.ToString();
+                  }                
                }
 
                reparseDataBuffer = (SymbolicLinkReparseData)Marshal.PtrToStructure(

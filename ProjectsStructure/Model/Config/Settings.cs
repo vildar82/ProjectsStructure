@@ -23,26 +23,16 @@ namespace ProjectsStructure.Model.Config
          {
             return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.xml");
          }
-      }
-
-      #region Properties      
-
-      [Browsable(true)]
-      [Category("Общие")]
-      [Description("Путь к папке проектов в Share")]
-      public string PathFolderShareProjects { get; set; }
-
-      [Browsable(true)]
-      [Category("Шаблоны структур")]
-      [Description("Переменные подстановки в именах, путях")]
-      public List<Variable> Variables { get; set; }
-
-      [Browsable(true)]
-      [Category("Шаблоны структур")]
-      [Description("Путь к файлу шаблонов в Excel")]
-      public string ExcelFileTemplates { get; set; }
-
-      #endregion Properties
+      }                 
+      
+      public string ProjectsShareFolder { get; set; }      
+      public string ProjectsWipFolder { get; set; }
+      public List<Variable> Variables { get; set; }      
+      public string TemplatesExcelFile { get; set; }                  
+      // Папка с папками шаблонов прав доступа. Шаблон прав - это папка с назначенными ей правами.
+      public string TemplatesAccessFolder { get; set; }
+      // Шаблон для структуры проекта
+      public string TemplateStructureProjectShare { get; set; }
 
       private static Settings Load()
       {
@@ -83,10 +73,13 @@ namespace ProjectsStructure.Model.Config
 
       public void Default()
       {
-         PathFolderShareProjects = @"c:\temp\test\Project\share";
+         ProjectsShareFolder = @"c:\temp\test\Project\share";
+         ProjectsWipFolder = @"c:\temp\test\Project\wip";
          Variables = new List<Variable>();
          Variables.Add(new Variable("Key1", "Value1"));
-         ExcelFileTemplates = @"c:\temp\test\Project\templates\Templates.xlsx";
+         TemplatesExcelFile = @"c:\temp\test\Project\templates\Templates.xlsx";
+         TemplatesAccessFolder = @"c:\temp\test\Project\templates\ШаблоныПрав";
+         TemplateStructureProjectShare = "{Проект}";
       }      
    }
 }

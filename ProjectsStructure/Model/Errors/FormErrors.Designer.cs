@@ -34,30 +34,42 @@
          // 
          // listBoxErrors
          // 
+         this.listBoxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
          this.listBoxErrors.FormattingEnabled = true;
          this.listBoxErrors.Location = new System.Drawing.Point(12, 12);
          this.listBoxErrors.Name = "listBoxErrors";
-         this.listBoxErrors.Size = new System.Drawing.Size(591, 303);
+         this.listBoxErrors.Size = new System.Drawing.Size(555, 277);
          this.listBoxErrors.TabIndex = 0;
          // 
          // textBoxError
          // 
-         this.textBoxError.Location = new System.Drawing.Point(12, 331);
+         this.textBoxError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.textBoxError.Location = new System.Drawing.Point(12, 305);
          this.textBoxError.Multiline = true;
          this.textBoxError.Name = "textBoxError";
          this.textBoxError.ReadOnly = true;
-         this.textBoxError.Size = new System.Drawing.Size(591, 158);
+         this.textBoxError.Size = new System.Drawing.Size(555, 158);
          this.textBoxError.TabIndex = 1;
          // 
          // FormErrors
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(615, 501);
+         this.ClientSize = new System.Drawing.Size(575, 470);
          this.Controls.Add(this.textBoxError);
          this.Controls.Add(this.listBoxErrors);
+         this.MaximizeBox = false;
+         this.MinimizeBox = false;
          this.Name = "FormErrors";
+         this.ShowIcon = false;
+         this.ShowInTaskbar = false;
+         this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
          this.Text = "FormErrors";
+         this.TopMost = true;
          this.ResumeLayout(false);
          this.PerformLayout();
 

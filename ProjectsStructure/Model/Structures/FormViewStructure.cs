@@ -13,20 +13,30 @@ namespace ProjectsStructure.Model.ViewStructure
 {
    public partial class FormViewStructure : Form
    {
-      private StructureService ss;
+      private List<Structure> structures;
 
-      public FormViewStructure(StructureService ss)
+      public FormViewStructure(List<Structure> structures)
       {
-         this.ss = ss;
+         this.structures = structures;
          InitializeComponent();
 
+         FillImageList();
+
          Rebinding();
+      }
+
+      private void FillImageList()
+      {
+         imageList1.Images.Add("Folder", Properties.Resources.folder);
+         imageList1.Images.Add("Link", Properties.Resources.link);
+         imageList1.Images.Add("Structure", Properties.Resources.structure);
+         imageList1.Images.Add("Template", Properties.Resources.template);
       }
 
       private void Rebinding()
       {
          comboBoxStructures.DataSource = null;
-         comboBoxStructures.DataSource = ss.STC.StructureTemplates;
+         comboBoxStructures.DataSource = structures;
       }
 
       private void comboBoxStructures_SelectedIndexChanged(object sender, EventArgs e)
@@ -37,10 +47,8 @@ namespace ProjectsStructure.Model.ViewStructure
       private void FillTreeView()
       {
          treeViewStructure.Nodes.Clear();
-
-         StructureTemplate s = comboBoxStructures.SelectedItem as StructureTemplate;
+         Structure s = comboBoxStructures.SelectedItem as Structure;
          if (s == null) return;
-
          FillNode(s.Root.ChildFolders.Values.ToList(), null);
       }
 
@@ -51,20 +59,35 @@ namespace ProjectsStructure.Model.ViewStructure
              : treeViewStructure.Nodes;
 
          foreach (var item in items)
-         {
-            FolderItemTemplate fiItem = (FolderItemTemplate)item;
+         {            
             TreeNode newNode = nodesCollection.Add(item.Name, item.Name);
-            newNode.ImageIndex = (int)fiItem.Type;
-            newNode.SelectedImageIndex = (int)fiItem.Type;
+            int imageIndex = getNodeImage(item);
+            newNode.ImageIndex = imageIndex;            
+            newNode.SelectedImageIndex = imageIndex;
             newNode.Tag = item;
             FillNode(item.ChildFolders.Values.ToList(), newNode);
          }
       }
 
+      private int getNodeImage(FolderItem fiItem)
+      {
+         return (int)fiItem.Type;
+      }
+
       private void treeViewStructure_AfterSelect(object sender, TreeViewEventArgs e)
       {
-         FolderItemTemplate fiSelect = e.Node.Tag as FolderItemTemplate;
-         labelInfo.Text = fiSelect.GetTypeName();
+         FolderItem fiSelect = e.Node.Tag as FolderItem;
+         richTextBoxInfo.Text = fiSelect.GetInfo();
+      }
+
+      private void buttonExpandAll_Click(object sender, EventArgs e)
+      {
+         treeViewStructure.ExpandAll();
+      }
+
+      private void buttonCollapsAll_Click(object sender, EventArgs e)
+      {
+         treeViewStructure.CollapseAll();
       }
    }
 }
