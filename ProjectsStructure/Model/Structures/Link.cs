@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjectsStructure.Model.Lib;
 
 namespace ProjectsStructure.Model.Structures
 {
@@ -19,21 +20,29 @@ namespace ProjectsStructure.Model.Structures
       private string targetOriginal;
 
       // Конструктор для шаблона структур
-      public Link (FolderItem fi, string target)
+      public Link(FolderItem fi, string target)
       {
          FolderItem = fi;
          targetOriginal = target;
-         // раскрытие переменных в ссылке (Определенных в конфиге - Variables)
-         TargetPath = target.Expand();
-         // Раскрытие относительного пути ссылки
-         if (!Path.IsPathRooted(target)) // Если цель ссылки не начинается с корневой папки, то это относительный путь
+         TargetPath = target;
+         if (fi is FolderItemTemplate)
          {
-            string path = Path.GetDirectoryName(fi.FullPath());
-            var absPath = Path.Combine(path, target);
-            TargetPath = Path.GetFullPath(absPath);
+            // Могут использоваться переменные - значения которых могут быть определены только при создании структуры проекта (Project и Object).
+            // раскрытие переменных в ссылке (Определенных в конфиге - Variables)
+            //TargetPath = target.Expand();
          }
-         // проверка ссылки
-         Check();
+         else
+         {            
+            // Раскрытие относительного пути ссылки
+            if (!Path.IsPathRooted(TargetPath)) // Если цель ссылки не начинается с корневой папки, то это может быть относительный путь
+            {
+               string path = Path.GetDirectoryName(fi.FullPath());
+               var absPath = Path.Combine(path, TargetPath);
+               TargetPath = Path.GetFullPath(absPath);
+            }
+            // проверка ссылки
+            Check();
+         }         
       }      
 
       private void Check()
@@ -52,12 +61,31 @@ namespace ProjectsStructure.Model.Structures
                   "Ошибка определения ссылки - цель ссылки не найдена. Структура {0}, ссылка {1}, цель ссылки {2}",
                   FolderItem.Structure.Name, FolderItem.FullPath(), TargetPath);
             }            
-            FolderItem.Structure.SS.Inspector.AddError(new Errors.Error(ErrMsg));
+            FolderItem.Structure.Service.Inspector.AddError(new Errors.Error(ErrMsg));
          }
          else
          {
             ErrMsg = "Ошибок нет.";
          }
+      }
+
+      /// <summary>
+      /// Создание ссылки
+      /// </summary>
+      /// <param name="dirLocation">Место расположения ссылки</param>
+      public void Create(DirectoryInfo dirLocation)
+      {
+         string linkPath = Path.Combine(dirLocation.FullName, FolderItem.Name.Expand());
+         try
+         {
+            SymbolicLink.CreateDirectoryLink(linkPath, TargetPath);
+         }
+         catch (Exception ex)
+         {
+            string errMsg = string.Format("Ошибка создания ссылки {0}. Цель ссылки {1}. Ошибка {2}",
+               linkPath, TargetPath, ex.ToString());
+            FolderItem.Structure.Service.Inspector.AddError(new Errors.Error(errMsg));
+         }         
       }
    }
 }

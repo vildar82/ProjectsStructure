@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace ProjectsStructure.Model
 {   
+   [Flags]
    public enum EnumFolderItem
    {
-      Folder,
-      Link,
-      Structure
+      Folder = 0,
+      Link = 2,
+      Structure = 4,
+      Object = 8,
+      Template =16         
    }
 }

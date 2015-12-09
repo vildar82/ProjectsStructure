@@ -31,6 +31,7 @@ namespace ProjectsStructure.Model.ViewStructure
          imageList1.Images.Add("Link", Properties.Resources.link);
          imageList1.Images.Add("Structure", Properties.Resources.structure);
          imageList1.Images.Add("Template", Properties.Resources.template);
+         imageList1.Images.Add("Object", Properties.Resources._object);
       }
 
       private void Rebinding()
@@ -71,7 +72,23 @@ namespace ProjectsStructure.Model.ViewStructure
 
       private int getNodeImage(FolderItem fiItem)
       {
-         return (int)fiItem.Type;
+         if (fiItem.Type.HasFlag(EnumFolderItem.Link))
+         {
+            return 1;
+         }
+         if (fiItem.Type.HasFlag(EnumFolderItem.Structure))
+         {
+            return 2;
+         }
+         if (fiItem.Type.HasFlag(EnumFolderItem.Object))
+         {
+            return 4;
+         }
+         if (fiItem.Type.HasFlag(EnumFolderItem.Template))
+         {
+            return 3;
+         }
+         return 0;
       }
 
       private void treeViewStructure_AfterSelect(object sender, TreeViewEventArgs e)

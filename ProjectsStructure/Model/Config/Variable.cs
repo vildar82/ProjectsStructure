@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace ProjectsStructure.Model.Config
 {
    public class Variable
-   {
-      public string Key { set; get; }
-      public string Value { set; get; }
+   {      
+      public string Key { get; set; }
+      public string Value { get; set;  }
 
       public Variable() { }
 

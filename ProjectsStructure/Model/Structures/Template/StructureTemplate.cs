@@ -13,12 +13,10 @@ namespace ProjectsStructure.Model.Structures
    public class StructureTemplate : Structure
    {        
       private ExcelWorksheet ws;
-      private ExcelStructureColumns colums;
+      private ExcelStructureColumns colums;     
 
-      public List<FolderItemTemplate> Objects { get; private set; }
-
-      public StructureTemplate(ExcelWorksheet sheet, StructureService ss) :
-         base (sheet.Name, ss)
+      public StructureTemplate(ExcelWorksheet sheet, Service service) :
+         base (sheet.Name, service)
       {         
          ws = sheet;         
       }
@@ -29,11 +27,10 @@ namespace ProjectsStructure.Model.Structures
       }
 
       public void ReadSheet()
-      {
-         Objects = new List<FolderItemTemplate>();
+      {         
          Root = new FolderItemTemplate(ws.Name, null, this); // корень структуры         
          // считывание заголовков столбцов - уровни/Структура/Шаблон/Ссылка
-         colums = new ExcelStructureColumns(ws, SS);         
+         colums = new ExcelStructureColumns(ws, Service);         
 
          int row = 2; // начальная строчка (1 - шапка)         
          // определение папки                  
@@ -49,8 +46,8 @@ namespace ProjectsStructure.Model.Structures
                {
                   string errMsg = string.Format(
                      "Структура {0} - пустая. Лист {1}, файл {2}",
-                     Name, ws.Name, SS.STC.ExcelFileTemplates);
-                  SS.Inspector.AddError(new Error(errMsg));
+                     Name, ws.Name, Service.STC.ExcelFileTemplates);
+                  Service.Inspector.AddError(new Error(errMsg));
                   throw new Exception(errMsg);
                }
                break;
@@ -60,6 +57,11 @@ namespace ProjectsStructure.Model.Structures
             fiParent = fi;
             row++;
          } while (fiParent != null);
+
+         //TODO: Проверка вложенных структур - проверка дублирования имен в папках после раскрытия вложенных структур.
+
+         // Проверка ссылок. В ссылках не должно быть вложенных папок.
+         Root.CheckFolderInLinks();
       }
 
       private FolderItemTemplate getFolderItem(int row, FolderItemTemplate fiParent)
@@ -90,8 +92,8 @@ namespace ProjectsStructure.Model.Structures
                      // ошибка в строке определено больше одного пути.
                      string errMsg = string.Format(
                         "В строке {0} определено две папки - {1} и {2}. Лист {3}, файл {4}",
-                        row, fiRes.Name, valFolder, ws.Name, SS.STC.ExcelFileTemplates);
-                     SS.Inspector.AddError(new Error(errMsg));
+                        row, fiRes.Name, valFolder, ws.Name, Service.STC.ExcelFileTemplates);
+                     Service.Inspector.AddError(new Error(errMsg));
                      throw new Exception(errMsg);
                   }
                }
@@ -113,8 +115,8 @@ namespace ProjectsStructure.Model.Structures
          if (fiRes == null && !string.IsNullOrEmpty(valLast))
          {
             string errMsg = string.Format("Не определена новая папка структуры в строке {0} - лист {1}, файл {2}",
-                                       row, ws.Name, SS.STC.ExcelFileTemplates);
-            SS.Inspector.AddError(new Error(errMsg));
+                                       row, ws.Name, Service.STC.ExcelFileTemplates);
+            Service.Inspector.AddError(new Error(errMsg));
             throw new Exception(errMsg);
          }
          return fiRes;
@@ -147,5 +149,27 @@ namespace ProjectsStructure.Model.Structures
          }
          return res;
       }      
+
+      /// <summary>
+      /// Создание структуры в папке
+      /// </summary>
+      /// <param name="dirLocation"></param>
+      public void Create(DirectoryInfo dirLocation, string project, List<string>objects)
+      {
+         // Задать переменные для project и создать корневую папку проекта.
+         if (project != null)
+         {
+            Service.Tokens["project"] = project;
+            dirLocation = dirLocation.CreateSubdirectory(project);
+         }         
+         try
+         {            
+            ((FolderItemTemplate)Root).Create(dirLocation, objects);
+         }
+         catch (Exception ex)
+         {
+            Service.Inspector.AddError(new Error(ex.ToString()));
+         }         
+      }
    }
 }

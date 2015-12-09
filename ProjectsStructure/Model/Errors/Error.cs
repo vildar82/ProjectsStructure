@@ -7,27 +7,14 @@ using System.Threading.Tasks;
 namespace ProjectsStructure.Model.Errors
 {
    public class Error
-   {      
-      private string shortMsg;
-      
+   {  
       public Error(string message)
       {
          Message = message;
       }
 
-      public string Message { get; private set; }
-
-      public string ShortMsg
-      {
-         get
-         {
-            if(shortMsg== null)
-            {
-               shortMsg = Message.Substring(0, 100);
-            }
-            return shortMsg;
-         }
-      }
+      public string Message { get; set; }
+      public string ShortMsg { get { return Message.Substring(0, 100); } }
 
       public override string ToString()
       {

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9BE7D893-F9BC-4C08-8C2F-A3531612E5CB}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ProjectsStructure</RootNamespace>
     <AssemblyName>ProjectsStructure</AssemblyName>
@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPPlus, Version=4.0.4.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.0.4\lib\net20\EPPlus.dll</HintPath>
@@ -55,9 +58,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\Expansive.cs" />
+    <Compile Include="Model\Config\FormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Model\Config\FormSettings.Designer.cs">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\Config\SerializerXml.cs" />
     <Compile Include="Model\Config\Settings.cs" />
     <Compile Include="Model\Config\Variable.cs" />
+    <Compile Include="Model\Lib\EnumExt.cs" />
     <Compile Include="Model\Structures\EnumFolderItem.cs" />
     <Compile Include="Model\Errors\Error.cs" />
     <Compile Include="Model\Errors\FormErrors.cs">
@@ -69,7 +79,7 @@
     <Compile Include="Model\Errors\Inspector.cs" />
     <Compile Include="Model\Structures\Live\FolderItemLive.cs" />
     <Compile Include="Model\Structures\Live\ProjectsCollection.cs" />
-    <Compile Include="Model\Structures\Live\ProjectShare.cs" />
+    <Compile Include="Model\Structures\Live\Project.cs" />
     <Compile Include="Model\Structures\Live\StructureLive.cs" />
     <Compile Include="Model\Structures\Template\ExcelStructureColumns.cs" />
     <Compile Include="Model\Structures\FolderItem.cs" />
@@ -84,7 +94,7 @@
     <Compile Include="Model\Lib\SymbolicLink.cs" />
     <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Structures\Structure.cs" />
-    <Compile Include="Model\StructureService.cs" />
+    <Compile Include="Model\Service.cs" />
     <Compile Include="Model\Structures\Template\FolderItemTemplate.cs" />
     <Compile Include="Model\Structures\Template\StructureTemplate.cs" />
     <Compile Include="Model\Structures\Template\StructureTemplateCollection.cs" />
@@ -122,7 +132,20 @@
     <Compile Include="Test\FormTestLink.Designer.cs">
       <DependentUpon>FormTestLink.cs</DependentUpon>
     </Compile>
+    <Compile Include="Test\FormTestProjects.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test\FormTestProjects.Designer.cs">
+      <DependentUpon>FormTestProjects.cs</DependentUpon>
+    </Compile>
     <Compile Include="Test\TestExpansion.cs" />
+    <EmbeddedResource Include="Test\FormTestProjects.resx">
+      <DependentUpon>FormTestProjects.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Resources\object.png" />
+    <EmbeddedResource Include="Model\Config\FormSettings.resx">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Model\Structures\Template\View\FormViewAccess.resx">
       <DependentUpon>FormViewAccess.cs</DependentUpon>
     </EmbeddedResource>
@@ -165,9 +188,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="VBIDE">

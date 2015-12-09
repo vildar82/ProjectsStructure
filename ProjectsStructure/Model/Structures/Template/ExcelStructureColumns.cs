@@ -20,7 +20,7 @@ namespace ProjectsStructure.Model
       private int _link;
 
       private ExcelWorksheet ws;
-      private StructureService ss;
+      private Service service;
 
       public int LevelFirst { get { return _levelFirst; } }
       public int LevelLast { get { return _levelLast; } }
@@ -28,10 +28,10 @@ namespace ProjectsStructure.Model
       public int Template { get { return _template; } }
       public int Link { get { return _link; } }
 
-      public ExcelStructureColumns(ExcelWorksheet ws, StructureService ss)
+      public ExcelStructureColumns(ExcelWorksheet ws, Service service)
       {
          this.ws = ws;
-         this.ss = ss;
+         this.service = service;
          // определение первого и последнего столбца уровня
          defLevelColumns();         
          // определение остальных столбццов
@@ -80,8 +80,8 @@ namespace ProjectsStructure.Model
             }
             string errMsg = string.Format(
                      "Не определен {0} столбец уровней на листе шаблона структуры {1} в файле {2}",
-                     errColDef, ws.Name, ss.STC.ExcelFileTemplates);
-            ss.Inspector.AddError(new Errors.Error(errMsg));
+                     errColDef, ws.Name, service.STC.ExcelFileTemplates);
+            service.Inspector.AddError(new Errors.Error(errMsg));
             throw new Exception(errMsg);
          }
       }
@@ -112,8 +112,8 @@ namespace ProjectsStructure.Model
             else
             {
                string errMsg = string.Format("Непредвиденный столбец на листе шаблона структуры {0} в файле {1}",
-                                    ws.Name, ss.STC.ExcelFileTemplates);
-               ss.Inspector.AddError(new Errors.Error(errMsg));
+                                    ws.Name, service.STC.ExcelFileTemplates);
+               service.Inspector.AddError(new Errors.Error(errMsg));
                break;
             }
             col++;
@@ -142,8 +142,8 @@ namespace ProjectsStructure.Model
          {
             string errMsg = string.Format(
                         "Не определены столбцы {0} на листе шаблона структуры {1} в файле {2}",
-                        errColDef, ws.Name, ss.STC.ExcelFileTemplates);
-            ss.Inspector.AddError(new Errors.Error(errMsg));
+                        errColDef, ws.Name, service.STC.ExcelFileTemplates);
+            service.Inspector.AddError(new Errors.Error(errMsg));
             throw new Exception(errMsg);
          }
       }

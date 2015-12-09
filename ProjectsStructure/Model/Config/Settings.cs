@@ -12,56 +12,69 @@ namespace ProjectsStructure.Model.Config
    [Serializable]
    public class Settings
    {
-      private static Settings instance = Load();
+      private static Settings instance;
 
-      private Settings() { }
+      private Settings() { }      
 
-      public static Settings Instance { get { return instance; } }
+      public static Settings Instance {
+         get
+         {
+            if (instance == null) Load();
+            return instance;
+         }
+      }
       private static string FileSettings
       {
          get
          {
             return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.xml");
          }
-      }                 
-      
-      public string ProjectsShareFolder { get; set; }      
-      public string ProjectsWipFolder { get; set; }
-      public List<Variable> Variables { get; set; }      
-      public string TemplatesExcelFile { get; set; }                  
-      // Папка с папками шаблонов прав доступа. Шаблон прав - это папка с назначенными ей правами.
-      public string TemplatesAccessFolder { get; set; }
-      // Шаблон для структуры проекта
-      public string TemplateStructureProjectShare { get; set; }
+      }
 
-      private static Settings Load()
+      //public string ProjectsShareFolder { get; set; }      
+      //public string ProjectsWipFolder { get; set; }
+      [Description("Имя шаблона структуры для проекта в области Share. Имя шаблоны структуры = имени листа в Excel.")]
+      public string TemplateStructureProjectShare { get; set; }
+      [Description("Имя шаблона структуры для проекта в области WIP. Имя шаблоны структуры = имени листа в Excel.")]
+      public string TemplateStructureProjectWIP { get; set; }
+      //[Description("Имя шаблона структуры для проекта в области BIM. Имя шаблоны структуры = имени листа в Excel.")]
+      //public string TemplateStructureProjectBIM { get; set; }
+      //[Description("Имя шаблона структуры для проекта в области Civil. Имя шаблоны структуры = имени листа в Excel.")]
+      //public string TemplateStructureProjectCivil { get; set; }      
+      [Description("Excel файл шаблонов структур")]
+      public string TemplatesExcelFile { get; set; }
+      [Description("Папка с папками определяющими шаблоны прав доступа.")]
+      public string TemplatesAccessFolder { get; set; }
+      [Description("Переменные. Используются при определении путей в шаблонах структур в файлe Excel. Использовать в стиле ${key}. Переменные project и object - зарезервированы.")]
+      public List<Variable> Variables { get; set; }
+
+      public static void Load()
       {
          if (File.Exists(FileSettings))
          {
             try
             {
                SerializerXml ser = new SerializerXml(FileSettings);
-               return ser.DeserializeXmlFile<Settings>();
+               instance = ser.DeserializeXmlFile<Settings>();
             }
             catch (Exception ex)
             {
-               Log.Error(ex, "Загрузка файла настроек.");
+               Program.Log.Error(ex, "Загрузка файла настроек.");
                throw;
             }
          }
          else
          {
-            Settings settings = new Settings();
-            settings.Default();
+            instance = new Settings();
+            instance.Default();
             try
             {
-               settings.Save();
+               instance.Save();
             }
             catch (Exception ex)
             {
-               Log.Error(ex, "Сохранение файла настроек.");
-            }
-            return settings;
+               Program.Log.Error(ex, "Сохранение файла настроек.");
+            }            
          }
       }
 
@@ -73,13 +86,22 @@ namespace ProjectsStructure.Model.Config
 
       public void Default()
       {
-         ProjectsShareFolder = @"c:\temp\test\Project\share";
-         ProjectsWipFolder = @"c:\temp\test\Project\wip";
-         Variables = new List<Variable>();
-         Variables.Add(new Variable("Key1", "Value1"));
-         TemplatesExcelFile = @"c:\temp\test\Project\templates\Templates.xlsx";
-         TemplatesAccessFolder = @"c:\temp\test\Project\templates\ШаблоныПрав";
+         //ProjectsShareFolder = @"c:\temp\test\Project\share";
+         //ProjectsWipFolder = @"c:\temp\test\Project\wip";         
+         TemplatesExcelFile = @"c:\temp\test\Project\_fld-str-current\templates\defaultTmpl.xlsx";
+         TemplatesAccessFolder = @"c:\temp\test\Project\_fld-str-current\templates\folders";
          TemplateStructureProjectShare = "{Проект}";
+         TemplateStructureProjectWIP = "{Проект}";
+         //TemplateStructureProjectBIM = "{BIM}";
+         //TemplateStructureProjectCivil = "{Civil}";
+
+         Variables = new List<Variable>();
+         Variables.Add(new Variable("share", @"c:\temp\test\Project\share"));
+         Variables.Add(new Variable("wip", @"c:\temp\test\Project\wip"));
+         //Variables.Add(new Variable("bim", @"c:\temp\test\Project\wip\_BIM"));
+         //Variables.Add(new Variable("bim", @"${wip}\_BIM"));
+         //Variables.Add(new Variable("civil", @"c:\temp\test\Project\wip\_Civil3D"));
+         //Variables.Add(new Variable("civil", @"${wip}\_Civil3D"));
       }      
    }
 }

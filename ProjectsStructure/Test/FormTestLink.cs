@@ -36,7 +36,7 @@ namespace ProjectsStructure.Test
          }
          catch (Exception ex)
          {
-            Log.Error(ex, "SymLinkExt.Create(имя ссылки {0}, назначение {1})", symlink, target);
+            Program.Log.Error(ex, "SymLinkExt.Create(имя ссылки {0}, назначение {1})", symlink, target);
             MessageBox.Show(ex.ToString());
          }
       }      

@@ -28,7 +28,7 @@ namespace ProjectsStructure.Test
          catch (Exception ex)
          {
             MessageBox.Show(ex.ToString());
-            Log.Error(ex, "FolderCopyAcces (template {0}, dest {1})", textBoxTemplate.Text, textBoxDest.Text);
+            Program.Log.Error(ex, "FolderCopyAcces (template {0}, dest {1})", textBoxTemplate.Text, textBoxDest.Text);
          }
       }
    }
