@@ -45,7 +45,9 @@ namespace ProjectsStructure.Model.Config
       public string TemplatesExcelFile { get; set; }
       [Description("Папка с папками определяющими шаблоны прав доступа.")]
       public string TemplatesAccessFolder { get; set; }
-      [Description("Переменные. Используются при определении путей в шаблонах структур в файлe Excel. Использовать в стиле ${key}. Переменные project и object - зарезервированы.")]
+      [Description("Текстовый файл с именами создаваемых проектов. Строка начинающаяся на # не учитывается")]
+      public string ProjectListFileToCreate { get; set; }
+      [Description("Переменные. Используются при определении путей в шаблонах структур в файлe Excel. Использовать в стиле ${key}. Переменные project и object - зарезервированы. Должны быть определены переменные share и wip - места расположения проектов.")]
       public List<Variable> Variables { get; set; }
 
       public static void Load()
@@ -95,6 +97,8 @@ namespace ProjectsStructure.Model.Config
          //TemplateStructureProjectBIM = "{BIM}";
          //TemplateStructureProjectCivil = "{Civil}";
 
+         ProjectListFileToCreate = @"c:\temp\test\Project\_fld-str-current\projectList_all.txt";
+
          Variables = new List<Variable>();
          Variables.Add(new Variable("share", @"c:\temp\test\Project\share"));
          Variables.Add(new Variable("wip", @"c:\temp\test\Project\wip"));
@@ -102,6 +106,22 @@ namespace ProjectsStructure.Model.Config
          //Variables.Add(new Variable("bim", @"${wip}\_BIM"));
          //Variables.Add(new Variable("civil", @"c:\temp\test\Project\wip\_Civil3D"));
          //Variables.Add(new Variable("civil", @"${wip}\_Civil3D"));
-      }      
+      }
+
+      public void LogInfo()
+      {
+         Program.Log.Info("Настройки:");
+         var typeSett = this.GetType();
+         var props = typeSett.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+         foreach (var prop in props)
+         {
+            var value = prop.GetValue(this);
+            if (value is List<Variable>)
+            {
+               var valString = 
+            }
+            Program.Log.Info("{0} = {1}", prop.Name, value);
+         }
+      }
    }
 }

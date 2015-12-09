@@ -25,9 +25,7 @@ namespace ProjectsStructure.Model.Errors
       public void Show()
       {
          string errMsgs = string.Join(";\n", Errors);
-         Program.Log.Error(errMsgs);
-         FormErrors formErr = new FormErrors(this);
-         formErr.Show();
+         Program.Log.Error(errMsgs);         
       }
 
       public void Clear()

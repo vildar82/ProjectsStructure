@@ -11,7 +11,6 @@ using ProjectsStructure.Model.Errors;
 using ProjectsStructure.Model.Structures;
 using ProjectsStructure.Model.Structures.Live;
 using ProjectsStructure.Model.Structures.Template;
-using ProjectsStructure.Properties;
 
 namespace ProjectsStructure.Model
 {
@@ -19,12 +18,20 @@ namespace ProjectsStructure.Model
    {      
       public string AreaShare { get; private set; } // Область проектов в Share - полный путь
       public string AreaWip { get; private set; }
-      public string AreaBim { get; private set; }
-      public string AreaCivil { get; private set; }
+      //public string AreaBim { get; private set; }
+      //public string AreaCivil { get; private set; }
       public ProjectsCollection Projects { get; private set; }
       public StructureTemplateCollection STC { get; private set; }
       public Inspector Inspector { get; private set; }
       public Dictionary<string, string> Tokens { get; set; }
+
+      public Service()
+      {
+         // Ошибки
+         Inspector = new Inspector();
+         // проверка настроек
+         CheckSettings();
+      }
 
       /// <summary>
       /// Считывание файла конфигурации
@@ -32,40 +39,79 @@ namespace ProjectsStructure.Model
       /// </summary>
       public void ReadTemplates()
       {
-         // Ошибки
-         Inspector = new Inspector();
-
-         // проверка настроек
-         CheckSettings();        
-
+         Program.Log.Info("Считывание шаблонов структур из файла {0}", Settings.Instance.TemplatesExcelFile);
          // считывание шаблонов структур
-         STC = new StructureTemplateCollection(this);         
-         STC.ReadStructuresFromExcel();
-         
-         if (Inspector.HasError)
+         STC = new StructureTemplateCollection(this);
+         try
          {
-            Inspector.Show();
-            Inspector.Clear();
+            STC.ReadStructuresFromExcel();
+         }
+         catch (Exception ex)
+         {
+            Inspector.AddError(new Error(ex));
+         }              
+
+         IfHasError("Найдены ошибки при считывании структур.");         
+      }
+
+      public void CreateProjectsFromFile()
+      {
+         // считывание создаваемых проектов из файла         
+         var lines = File.ReadAllLines(Settings.Instance.ProjectListFileToCreate, Encoding.Default);
+         foreach (var line in lines)
+         {
+            if (!line.StartsWith("#"))
+            {
+               // Создание проекта в Share          
+               TryCreateProject(line.Trim(), STC.StructureShare, Tokens["share"]);
+               // Создание проекта в WIP
+               TryCreateProject(line.Trim(), STC.StructureWip, Tokens["wip"]);               
+            }
+         }
+         IfHasError("Есть ошибки при создании проектов.");         
+      }
+
+      private void TryCreateProject(string projectName, StructureTemplate structure, string dir)
+      {
+         try
+         {
+            structure.Create(new DirectoryInfo(dir), projectName, null);
+         }
+         catch (Exception ex)
+         {
+            Inspector.AddError(new Error(ex));
          }
       }
 
+      /// <summary>
+      /// Считывание проектов в Share и Wip. Результат см в Projects
+      /// </summary>
       public void ReadProjects()
       {
          //считывание проектов
          Projects = new ProjectsCollection(this);
          Projects.ReadProjects();
 
+         IfHasError("Найдены ошибки при считывании проектов.");
+      }
+
+      public void IfHasError(string caption)
+      {
          if (Inspector.HasError)
          {
             Inspector.Show();
             Inspector.Clear();
+            throw new Exception(caption);
          }
       }
 
       public void CheckSettings()
       {
+         // Лог настроек
+         Settings.Instance.LogInfo();                
+
          // Проверка переменных
-         CheckVariables();
+         CheckVariables();        
       }
 
       private void CheckVariables()
@@ -107,8 +153,8 @@ namespace ProjectsStructure.Model
       {
          AreaShare = CheckArea("share", tokens);
          AreaWip = CheckArea("wip", tokens);
-         AreaBim = CheckArea("bim", tokens);
-         AreaCivil = CheckArea("civil", tokens);
+         //AreaBim = CheckArea("bim", tokens);
+         //AreaCivil = CheckArea("civil", tokens);
       }
 
       private string CheckArea(string area, Dictionary<string, string> tokens)
@@ -125,7 +171,7 @@ namespace ProjectsStructure.Model
          }
          else
          {
-            // Ошибка - не определена переменная share
+            // Ошибка - не определена переменная области
             Inspector.AddError(new Error(string.Format("Не определена переменная {0}", area)));
          }
          return valArea;

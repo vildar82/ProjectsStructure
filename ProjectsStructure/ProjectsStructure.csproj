@@ -58,24 +58,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\Expansive.cs" />
-    <Compile Include="Model\Config\FormSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Model\Config\FormSettings.Designer.cs">
-      <DependentUpon>FormSettings.cs</DependentUpon>
-    </Compile>
     <Compile Include="Model\Config\SerializerXml.cs" />
     <Compile Include="Model\Config\Settings.cs" />
     <Compile Include="Model\Config\Variable.cs" />
     <Compile Include="Model\Lib\EnumExt.cs" />
     <Compile Include="Model\Structures\EnumFolderItem.cs" />
     <Compile Include="Model\Errors\Error.cs" />
-    <Compile Include="Model\Errors\FormErrors.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Model\Errors\FormErrors.Designer.cs">
-      <DependentUpon>FormErrors.cs</DependentUpon>
-    </Compile>
     <Compile Include="Model\Errors\Inspector.cs" />
     <Compile Include="Model\Structures\Live\FolderItemLive.cs" />
     <Compile Include="Model\Structures\Live\ProjectsCollection.cs" />
@@ -83,16 +71,9 @@
     <Compile Include="Model\Structures\Live\StructureLive.cs" />
     <Compile Include="Model\Structures\Template\ExcelStructureColumns.cs" />
     <Compile Include="Model\Structures\FolderItem.cs" />
-    <Compile Include="Model\FormStructure.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Model\FormStructure.Designer.cs">
-      <DependentUpon>FormStructure.cs</DependentUpon>
-    </Compile>
     <Compile Include="Model\Lib\FolderExt.cs" />
     <Compile Include="Model\Lib\StringExt.cs" />
     <Compile Include="Model\Lib\SymbolicLink.cs" />
-    <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Structures\Structure.cs" />
     <Compile Include="Model\Service.cs" />
     <Compile Include="Model\Structures\Template\FolderItemTemplate.cs" />
@@ -100,87 +81,8 @@
     <Compile Include="Model\Structures\Template\StructureTemplateCollection.cs" />
     <Compile Include="Model\Structures\Template\TemplateAcces.cs" />
     <Compile Include="Model\Structures\Link.cs" />
-    <Compile Include="Model\Structures\FormViewStructure.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Model\Structures\FormViewStructure.Designer.cs">
-      <DependentUpon>FormViewStructure.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Structures\Template\View\FormViewAccess.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Model\Structures\Template\View\FormViewAccess.Designer.cs">
-      <DependentUpon>FormViewAccess.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Structures\Template\View\FormViewTemplates.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Model\Structures\Template\View\FormViewTemplates.Designer.cs">
-      <DependentUpon>FormViewTemplates.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Test\FormTestFolderAccessCopy.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Test\FormTestFolderAccessCopy.Designer.cs">
-      <DependentUpon>FormTestFolderAccessCopy.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Test\FormTestLink.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Test\FormTestLink.Designer.cs">
-      <DependentUpon>FormTestLink.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Test\FormTestProjects.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Test\FormTestProjects.Designer.cs">
-      <DependentUpon>FormTestProjects.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Test\TestExpansion.cs" />
-    <EmbeddedResource Include="Test\FormTestProjects.resx">
-      <DependentUpon>FormTestProjects.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="Resources\object.png" />
-    <EmbeddedResource Include="Model\Config\FormSettings.resx">
-      <DependentUpon>FormSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Model\Structures\Template\View\FormViewAccess.resx">
-      <DependentUpon>FormViewAccess.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Model\Structures\Template\View\FormViewTemplates.resx">
-      <DependentUpon>FormViewTemplates.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Test\FormTestFolderAccessCopy.resx">
-      <DependentUpon>FormTestFolderAccessCopy.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Test\FormTestLink.resx">
-      <DependentUpon>FormTestLink.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="Resources\template.png" />
-    <None Include="Resources\structure.png" />
-    <None Include="Resources\link.png" />
-    <None Include="Resources\folder.png" />
-    <EmbeddedResource Include="Model\Errors\FormErrors.resx">
-      <DependentUpon>FormErrors.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Model\FormStructure.resx">
-      <DependentUpon>FormStructure.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Model\Structures\FormViewStructure.resx">
-      <DependentUpon>FormViewStructure.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

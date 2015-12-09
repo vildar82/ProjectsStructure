@@ -72,6 +72,7 @@ namespace ProjectsStructure.Model.Structures.Template
                try
                {
                   ((StructureTemplate)structure).ReadSheet();
+                  Program.Log.Info("Считан шаблон структуры - {0}", structure.Name);
                }
                catch (Exception ex)
                {

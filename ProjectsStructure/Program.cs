@@ -7,7 +7,6 @@ using NLog;
 using ProjectsStructure.Model;
 using ProjectsStructure.Model.Config;
 using ProjectsStructure.Model.Structures.Live;
-using ProjectsStructure.Test;
 
 namespace ProjectsStructure
 {
@@ -25,32 +24,53 @@ namespace ProjectsStructure
 
       [STAThread]
       static void Main(string[] args)
-      {  
+      {
          Log.Info("Старт программы: аргументы {0}", args);
+         service = new Service();
 
-         //Application.EnableVisualStyles();
-         //Application.SetCompatibleTextRenderingDefault(false);
-         //Application.Run(new FormStructure());         
-
-         //service = new Service();
-
-         // Считывание шаблонов структор
-         //service.ReadTemplates();
-
-         EnumMode mode = getMode();
-
-         Console.WriteLine("Режим {0}", mode);
-
-
-         if (mode == EnumMode.Projects)
+         // Считывание шаблонов структр         
+         try
          {
-            // Создание проектов
+            service.ReadTemplates();
+         }
+         catch (Exception ex)
+         {
+            Console.WriteLine("Ошибка. {0}", ex.Message);
+            Log.Error(ex, "Ошибка при считывании структур. Файл шаблонов структур {0}", Settings.Instance.TemplatesExcelFile);
+            Exit();
+            return;
+         }
+
+         // Запрос режима работы
+         EnumMode mode = getMode();
+         Console.WriteLine("Режим {0}", mode);
+         
+         if (mode == EnumMode.Projects)
+         {            
+            try
+            {
+               // Создание проектов
+               service.CreateProjectsFromFile();
+            }
+            catch (Exception ex)
+            {
+               Console.WriteLine("Ошибка. {0}", ex.Message);
+               Log.Error(ex, "Ошибка при создании проетов. Файл списка создаваемых проектов {0}", Settings.Instance.ProjectListFileToCreate);
+               Exit();
+               return;
+            }            
          }
          else if (mode == EnumMode.Objects)
          {
-            // Создание объектов
+            // Создание объектов - нужно знать имя проекта для которого создавать объекты. Список объектов получить из файла шаблона проекта в корне проекта в Share
+
          }
 
+         Exit();
+      }
+
+      private static void Exit()
+      {
          Console.Write("Press any key to exit.");
          Console.ReadKey();
       }

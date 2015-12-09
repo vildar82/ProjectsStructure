@@ -13,6 +13,11 @@ namespace ProjectsStructure.Model.Errors
          Message = message;
       }
 
+      public Error(Exception ex)
+      {
+         Message = ex.Message;
+      }
+
       public string Message { get; set; }
       public string ShortMsg { get { return Message.Substring(0, 100); } }
 

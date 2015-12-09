@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using ProjectsStructure.Model.Errors;
-using ProjectsStructure.Properties;
 
 namespace ProjectsStructure.Model.Structures
 {
