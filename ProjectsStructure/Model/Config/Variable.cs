@@ -21,7 +21,7 @@ namespace ProjectsStructure.Model.Config
 
       public override string ToString()
       {
-         return string.Format("{0} = {1}", Key, Value);
+         return string.Format("{0} - {1}", Key, Value);
       }
    }
 }

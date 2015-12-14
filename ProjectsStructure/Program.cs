@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -7,6 +8,7 @@ using NLog;
 using ProjectsStructure.Model;
 using ProjectsStructure.Model.Config;
 using ProjectsStructure.Model.Structures.Live;
+using ProjectsStructure.Model.Structures.Objects;
 
 namespace ProjectsStructure
 {
@@ -34,9 +36,8 @@ namespace ProjectsStructure
             service.ReadTemplates();
          }
          catch (Exception ex)
-         {
-            Console.WriteLine("Ошибка. {0}", ex.Message);
-            Log.Error(ex, "Ошибка при считывании структур. Файл шаблонов структур {0}", Settings.Instance.TemplatesExcelFile);
+         {            
+            Log.Error(ex, "Есть ошибки при считывании структур. Файл шаблонов структур {0}", Settings.Instance.TemplatesExcelFile);
             Exit();
             return;
          }
@@ -50,12 +51,11 @@ namespace ProjectsStructure
             try
             {
                // Создание проектов
-               service.CreateProjectsFromFile();
+               service.CreateProjects();
             }
             catch (Exception ex)
-            {
-               Console.WriteLine("Ошибка. {0}", ex.Message);
-               Log.Error(ex, "Ошибка при создании проетов. Файл списка создаваемых проектов {0}", Settings.Instance.ProjectListFileToCreate);
+            {               
+               Log.Error(ex, "Есть ошибки при создании проектов. Файл списка создаваемых проектов {0}", Settings.Instance.ProjectListFileToCreate);
                Exit();
                return;
             }            
@@ -63,9 +63,20 @@ namespace ProjectsStructure
          else if (mode == EnumMode.Objects)
          {
             // Создание объектов - нужно знать имя проекта для которого создавать объекты. Список объектов получить из файла шаблона проекта в корне проекта в Share
+            string projectName = "0000_Test";
+            string fileProjectTemplate = @"c:\temp\test\Project\share\0000_Test\0000_Test.xlsx";
 
+            // Считывание списка объектов для проекта из файла шаблона проекта.
+            // проверка откроется ли epplus файл который открыть у пользователя
+            try
+            {
+               service.CreateObjects(projectName, fileProjectTemplate);
+            }
+            catch (Exception ex)
+            {
+               Program.Log.Error(ex, "Ошибка создания объектов. Проект {0}, шаблон проета {1}", projectName, fileProjectTemplate);
+            }            
          }
-
          Exit();
       }
 

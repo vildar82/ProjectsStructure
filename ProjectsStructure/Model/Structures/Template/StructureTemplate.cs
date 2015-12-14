@@ -153,22 +153,37 @@ namespace ProjectsStructure.Model.Structures
       /// Создание структуры в папке
       /// </summary>
       /// <param name="dirLocation"></param>
-      public void Create(DirectoryInfo dirLocation, string project, List<string>objects)
+      public DirectoryInfo Create(DirectoryInfo dirLocation, string project, List<string>objects)
       {
+         if (!dirLocation.Exists)
+         {
+            Service.Inspector.AddError(new Error("Папки для создания структуры не существует. Структура {0}, Путь {1}",
+                                                this.Name, dirLocation.FullName));
+            return null;
+         }         
+
          // Задать переменные для project и создать корневую папку проекта.
          if (project != null)
          {
             Service.Tokens["project"] = project;
+            var dirProject = Path.Combine(dirLocation.FullName, project);
+            if (Directory.Exists(dirProject))
+            {
+               // Проект уже существует
+               Service.Inspector.AddError(new Error("Такой проект уже существует - {0}, путь {1}", project, dirProject));
+               throw new Exception(string.Format("Ошибка создания проекта {0}", project));
+            }
             dirLocation = dirLocation.CreateSubdirectory(project);
          }         
          try
-         {            
+         {
             ((FolderItemTemplate)Root).Create(dirLocation, objects);
          }
          catch (Exception ex)
          {
             Service.Inspector.AddError(new Error(ex.ToString()));
-         }         
+         }
+         return dirLocation;
       }
    }
 }

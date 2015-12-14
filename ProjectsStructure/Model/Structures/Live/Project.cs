@@ -12,16 +12,18 @@ namespace ProjectsStructure.Model.Structures.Live
    // Проект
    public class Project
    {
+      private Service _service;
+
       // Имя проекта - имя корневой папки
       public string Name { get; private set; }
       public string Area { get; private set; } // Область размещения проекта
       // Полный путь к папке проекта
       public DirectoryInfo Dir { get; private set; }
       // Структура проекта
-      public StructureLive Structure { get; private set; }
-      public StructureTemplate Template { get; set; }
+      public StructureLive StructureLive { get; private set; }
+      public StructureTemplate StructureTemplate { get; set; }
       // Объекты ??? Имена. Объекты могут быть расположены в нескольких местах в структуре проекта.
-      public List<string> Objects { get; private set; }
+      public List<string> ObjectsLive { get; private set; }
       /// <summary>
       /// Ссылка на коллекцию проектов
       /// </summary>
@@ -29,10 +31,13 @@ namespace ProjectsStructure.Model.Structures.Live
       public bool HasError { get { return Error != null; } }
       public Error Error { get; private set; }
 
-      public Project(DirectoryInfo dir, ProjectsCollection projects)
+      
+
+      public Project(DirectoryInfo dir, Service service)
       {
+         _service = service;
          Dir = dir;
-         Projects = projects;
+         Projects = _service.Projects;
          Name = Dir.Name;
       }      
 
@@ -42,10 +47,10 @@ namespace ProjectsStructure.Model.Structures.Live
       public void ReadStructure()
       {         
          // Структура
-         Structure = new StructureLive(Dir, Projects.Service);
-         Structure.Read();
+         StructureLive = new StructureLive(Dir, Projects.Service);
+         StructureLive.Read();
          // Список объектов??? - по шаблону структуры проекта - определить места размещения папок [Объект]
-         Objects = GetObjects();         
+         ObjectsLive = GetObjects();         
       }
 
       public void CheckProject()
@@ -72,7 +77,7 @@ namespace ProjectsStructure.Model.Structures.Live
       private List<string> GetObjects()
       {
          List<string> objects = new List<string>();
-         if (Template == null)
+         if (StructureTemplate == null)
          {
             string errMsg = string.Format("Не найден шаблон структуры для проекта в {0} - {1}", 
                            Area ,Settings.Instance.TemplateStructureProjectShare);
@@ -93,6 +98,35 @@ namespace ProjectsStructure.Model.Structures.Live
                //}            
          }
          return objects;
+      }
+
+      public void CreateObjects(List<ObjectInfo> objects)
+      {
+         // TODO: Создание объектов в живой структуре
+         // Если папка объекта существует, то она пропускается.
+
+         // Найти в шаблоне структуры место размещения объекта
+         // найти соответствующее расположение этой папки в существующей структуре проекта
+      }
+
+      /// <summary>
+      /// Создание файла шаблона проекта в корне папки проекта
+      /// </summary>
+      public void CreateFileProjectTemplate()
+      {
+         // скопировать файл шаблона проекта
+         FileInfo fiTemplate = new FileInfo(Settings.Instance.TemplateProjectExcelFile);
+         string fileProjectTemplate = Path.Combine(Dir.FullName, Name + ".xlsx");
+         try
+         {
+            FileInfo fiProject = fiTemplate.CopyTo(fileProjectTemplate);
+            // TODO Подпись имени проекта в файле
+         }
+         catch (Exception ex)
+         {
+            this._service.Inspector.AddError(new Error("Ошибка при копировании файла шаблона - {0}. Проект {1} в файл {2}. Шаблон {3}. ",
+                     ex.Message, Name, fileProjectTemplate, Settings.Instance.TemplateProjectExcelFile));
+         }  
       }
 
       public override string ToString()

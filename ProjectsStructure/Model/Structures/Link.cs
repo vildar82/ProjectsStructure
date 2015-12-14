@@ -18,10 +18,12 @@ namespace ProjectsStructure.Model.Structures
       public string TargetPath { get; private set; }
       public string ErrMsg { get; private set; }
       private string targetOriginal;
+      private Service _service;
 
       // Конструктор для шаблона структур
       public Link(FolderItem fi, string target)
       {
+         _service = fi.Structure.Service;
          FolderItem = fi;
          targetOriginal = target;
          TargetPath = target;
@@ -60,8 +62,8 @@ namespace ProjectsStructure.Model.Structures
                ErrMsg = string.Format(
                   "Ошибка определения ссылки - цель ссылки не найдена. Структура {0}, ссылка {1}, цель ссылки {2}",
                   FolderItem.Structure.Name, FolderItem.FullPath(), TargetPath);
-            }            
-            FolderItem.Structure.Service.Inspector.AddError(new Errors.Error(ErrMsg));
+            }
+            _service.Inspector.AddError(new Errors.Error(ErrMsg));
          }
          else
          {
@@ -76,15 +78,21 @@ namespace ProjectsStructure.Model.Structures
       public void Create(DirectoryInfo dirLocation)
       {
          string linkPath = Path.Combine(dirLocation.FullName, FolderItem.Name.Expand());
+         string targetPath = Path.Combine(TargetPath.Expand());
          try
          {
-            SymbolicLink.CreateDirectoryLink(linkPath, TargetPath);
+            SymbolicLink.CreateDirectoryLink(linkPath, targetPath);
+            //// тест - создание текстового файла в папке назначения ссылки - с текстом полного пути
+            //using (var txt = File.CreateText(Path.Combine(targetPath, FolderItem.Name + ".txt")))
+            //{
+            //   txt.WriteLine(targetPath);               
+            //}
          }
          catch (Exception ex)
          {
             string errMsg = string.Format("Ошибка создания ссылки {0}. Цель ссылки {1}. Ошибка {2}",
-               linkPath, TargetPath, ex.ToString());
-            FolderItem.Structure.Service.Inspector.AddError(new Errors.Error(errMsg));
+               linkPath, targetPath, ex.ToString());
+            _service.Inspector.AddError(new Errors.Error(errMsg));
          }         
       }
    }

@@ -60,11 +60,8 @@ namespace ProjectsStructure.Model.Structures.Template
             var wbStructure = excelStructure.Workbook;
             foreach (var ws in wbStructure.Worksheets)
             {
-               if (ws.Name.StartsWith("{"))
-               {
-                  var structure = new StructureTemplate(ws, Service);
-                  StructureTemplates.Add(structure);
-               }
+               var structure = new StructureTemplate(ws, Service);
+               StructureTemplates.Add(structure);
             }
             List<Structure> errorStructures = new List<Structure>();
             foreach (var structure in StructureTemplates)

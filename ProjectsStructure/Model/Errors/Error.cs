@@ -13,6 +13,11 @@ namespace ProjectsStructure.Model.Errors
          Message = message;
       }
 
+      public Error(string message, params object[] args)
+      {
+         Message = string.Format(message, args);
+      }
+
       public Error(Exception ex)
       {
          Message = ex.Message;

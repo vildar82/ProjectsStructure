@@ -41,6 +41,8 @@ namespace ProjectsStructure.Model.Config
       //public string TemplateStructureProjectBIM { get; set; }
       //[Description("Имя шаблона структуры для проекта в области Civil. Имя шаблоны структуры = имени листа в Excel.")]
       //public string TemplateStructureProjectCivil { get; set; }      
+      [Description("Excel файл шаблона проекта")]
+      public string TemplateProjectExcelFile { get; set; }
       [Description("Excel файл шаблонов структур")]
       public string TemplatesExcelFile { get; set; }
       [Description("Папка с папками определяющими шаблоны прав доступа.")]
@@ -89,11 +91,14 @@ namespace ProjectsStructure.Model.Config
       public void Default()
       {
          //ProjectsShareFolder = @"c:\temp\test\Project\share";
-         //ProjectsWipFolder = @"c:\temp\test\Project\wip";         
-         TemplatesExcelFile = @"c:\temp\test\Project\_fld-str-current\templates\defaultTmpl.xlsx";
+         //ProjectsWipFolder = @"c:\temp\test\Project\wip"; 
+
+         TemplateProjectExcelFile = @"c:\temp\test\Project\_fld-str-current\templates\projectTempl.xlsx";
+         TemplatesExcelFile = @"c:\temp\test\Project\_fld-str-current\templates\mk_fs-35_list-v.xlsm";
          TemplatesAccessFolder = @"c:\temp\test\Project\_fld-str-current\templates\folders";
-         TemplateStructureProjectShare = "{Проект}";
-         TemplateStructureProjectWIP = "{Проект}";
+         TemplateStructureProjectShare = "fld-35-sp";
+         TemplateStructureProjectWIP = "fld-35-wp";
+
          //TemplateStructureProjectBIM = "{BIM}";
          //TemplateStructureProjectCivil = "{Civil}";
 
@@ -112,15 +117,17 @@ namespace ProjectsStructure.Model.Config
       {
          Program.Log.Info("Настройки:");
          var typeSett = this.GetType();
-         var props = typeSett.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+         var props = typeSett.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
+         props.Sort((p1, p2)=> p1.Name.CompareTo(p2.Name));
          foreach (var prop in props)
          {
             var value = prop.GetValue(this);
             if (value is List<Variable>)
             {
-               var valString = 
+               var valString = string.Join("; ",((List<Variable>)value));
+               value = valString;
             }
-            Program.Log.Info("{0} = {1}", prop.Name, value);
+            Program.Log.Info("{0}: {1}", prop.Name, value);
          }
       }
    }

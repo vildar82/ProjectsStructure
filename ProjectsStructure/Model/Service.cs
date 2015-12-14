@@ -10,6 +10,7 @@ using ProjectsStructure.Model.Config;
 using ProjectsStructure.Model.Errors;
 using ProjectsStructure.Model.Structures;
 using ProjectsStructure.Model.Structures.Live;
+using ProjectsStructure.Model.Structures.Objects;
 using ProjectsStructure.Model.Structures.Template;
 
 namespace ProjectsStructure.Model
@@ -54,33 +55,66 @@ namespace ProjectsStructure.Model
          IfHasError("Найдены ошибки при считывании структур.");         
       }
 
-      public void CreateProjectsFromFile()
+      public void CreateProjects()
       {
+         Inspector.Clear();
          // считывание создаваемых проектов из файла         
          var lines = File.ReadAllLines(Settings.Instance.ProjectListFileToCreate, Encoding.Default);
          foreach (var line in lines)
          {
             if (!line.StartsWith("#"))
             {
-               // Создание проекта в Share          
-               TryCreateProject(line.Trim(), STC.StructureShare, Tokens["share"]);
+               var projName = line.Trim();
+
                // Создание проекта в WIP
-               TryCreateProject(line.Trim(), STC.StructureWip, Tokens["wip"]);               
+               TryCreateProject(projName, STC.StructureWip, Tokens["wip"]);
+
+               // Создание проекта в Share                 
+               var dirProjShare = TryCreateProject(projName, STC.StructureShare, Tokens["share"]);
+
+               // Создание файла Excel шаблона проекта.
+               Project projShare = new Project(dirProjShare, this);
+               projShare.CreateFileProjectTemplate();
             }
          }
          IfHasError("Есть ошибки при создании проектов.");         
       }
 
-      private void TryCreateProject(string projectName, StructureTemplate structure, string dir)
+      public void CreateObjects(string projectName, string fileProjectTepmlate)
       {
+         // Создание объектов для проекта         
+         // Список объектов считывается из файла шаблона проекта в корне папки проекта.
+
+         // Папка проекта
+         var dirProjShare = new DirectoryInfo(Path.Combine(Tokens["share"], projectName));
+
+         // Получение списка объектов у проекта
+         ObjectInfoService objectService = new ObjectInfoService(this, dirProjShare, fileProjectTepmlate);
+         objectService.GetObjects();        
+         
+         // создание объектов в проекте в WIP
+         Project projWip = new Project(dirProjShare, this);
+         projWip.StructureTemplate = STC.StructureWip;
+         projWip.CreateObjects(objectService.Objects);
+
+         // создание объектов в проекте в Share
+         Project projShare = new Project(dirProjShare, this);
+         projShare.StructureTemplate = STC.StructureShare;
+         projShare.CreateObjects(objectService.Objects);
+      }
+
+      private DirectoryInfo TryCreateProject(string projectName, StructureTemplate structure, string dir)
+      {         
          try
          {
-            structure.Create(new DirectoryInfo(dir), projectName, null);
+            Program.Log.Info("Создание проекта {0} по шаблону структуры {1} в {2}:", projectName, structure.Name, dir);
+            return structure.Create(new DirectoryInfo(dir), projectName, null);            
          }
          catch (Exception ex)
          {
             Inspector.AddError(new Error(ex));
-         }
+            return null;
+         }         
       }
 
       /// <summary>

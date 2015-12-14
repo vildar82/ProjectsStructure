@@ -19,13 +19,14 @@ namespace ProjectsStructure.Model.Errors
 
       public void AddError (Error error)
       {
-         Errors.Add(error);         
-      }      
+         Errors.Add(error);
+         Program.Log.Error(error.Message);
+      }
 
       public void Show()
       {
-         string errMsgs = string.Join(";\n", Errors);
-         Program.Log.Error(errMsgs);         
+         //string errMsgs = string.Join(";\n", Errors);
+         //Program.Log.Error(errMsgs);         
       }
 
       public void Clear()

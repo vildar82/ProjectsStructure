@@ -69,6 +69,10 @@
     <Compile Include="Model\Structures\Live\ProjectsCollection.cs" />
     <Compile Include="Model\Structures\Live\Project.cs" />
     <Compile Include="Model\Structures\Live\StructureLive.cs" />
+    <Compile Include="Model\Structures\Objects\ExcelColumnsObjects.cs" />
+    <Compile Include="Model\Structures\Objects\ObjectInfo.cs" />
+    <Compile Include="Model\Structures\Objects\ObjectInfoService.cs" />
+    <Compile Include="Model\Structures\StructureModifier.cs" />
     <Compile Include="Model\Structures\Template\ExcelStructureColumns.cs" />
     <Compile Include="Model\Structures\FolderItem.cs" />
     <Compile Include="Model\Lib\FolderExt.cs" />
