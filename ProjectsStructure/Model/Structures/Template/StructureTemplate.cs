@@ -6,18 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using ProjectsStructure.Model.Errors;
+using ProjectsStructure.Model.Structures.Template.FolderTypes;
 
 namespace ProjectsStructure.Model.Structures
 {
    public class StructureTemplate : Structure
    {        
-      private ExcelWorksheet ws;
-      private ExcelStructureColumns colums;     
+      public ExcelWorksheet WS { get; private set; }
+      public ExcelStructureColumns Colums { get; private set; }
+
+      public List<FolderItemTemplate> ObjectsFolders { get; private set; }
 
       public StructureTemplate(ExcelWorksheet sheet, Service service) :
          base (sheet.Name, service)
       {         
-         ws = sheet;         
+         WS = sheet;
+         ObjectsFolders = new List<FolderItemTemplate>();
       }
 
       public override string ToString()
@@ -27,17 +31,18 @@ namespace ProjectsStructure.Model.Structures
 
       public void ReadSheet()
       {         
-         Root = new FolderItemTemplate(ws.Name, null, this); // корень структуры         
+         Root = new FolderItemRoot (WS.Name, null, this); // корень структуры         
          // считывание заголовков столбцов - уровни/Структура/Шаблон/Ссылка
-         colums = new ExcelStructureColumns(ws, Service);         
+         Colums = new ExcelStructureColumns(WS, Service);         
 
          int row = 2; // начальная строчка (1 - шапка)         
          // определение папки                  
          FolderItemTemplate fiParent = (FolderItemTemplate)Root;
+         var factory = new FactoryFolderItemTemplate(this);
          do
          {
-            // папка в строке
-            var fi = getFolderItem(row, fiParent);
+            // определение папки по строеке
+            var fi = factory.CreateFolderItem(row, fiParent);
             if (fi == null)
             {
                // конец структуры
@@ -45,14 +50,18 @@ namespace ProjectsStructure.Model.Structures
                {
                   string errMsg = string.Format(
                      "Структура {0} - пустая. Лист {1}, файл {2}",
-                     Name, ws.Name, Service.STC.ExcelFileTemplates);
+                     Name, WS.Name, Service.STC.ExcelFileTemplates);
                   Service.Inspector.AddError(new Error(errMsg));
                   throw new Exception(errMsg);
                }
                break;
             }
             // определение вложенной Структуры/ Шаблона / Ссылки
-            fi.DefAttributes(ws, colums);
+            fi.DefAttributes(WS, Colums);
+            if (fi.Type.HasFlag(EnumFolderItem.Object))
+            {
+               ObjectsFolders.Add(fi);
+            }
             fiParent = fi;
             row++;
          } while (fiParent != null);
@@ -68,9 +77,9 @@ namespace ProjectsStructure.Model.Structures
          FolderItemTemplate fiRes = null;
          string valLast = string.Empty;
          FolderItemTemplate fiLast = null;
-         for (int iCol = colums.LevelFirst; iCol <= colums.LevelLast; iCol++)
+         for (int iCol = Colums.LevelFirst; iCol <= Colums.LevelLast; iCol++)
          {
-            string valFolder = ws.Cells[row, iCol].Text;
+            string valFolder = WS.Cells[row, iCol].Text;
             if (!string.IsNullOrEmpty(valFolder))
             {
                valLast = valFolder;
@@ -91,7 +100,7 @@ namespace ProjectsStructure.Model.Structures
                      // ошибка в строке определено больше одного пути.
                      string errMsg = string.Format(
                         "В строке {0} определено две папки - {1} и {2}. Лист {3}, файл {4}",
-                        row, fiRes.Name, valFolder, ws.Name, Service.STC.ExcelFileTemplates);
+                        row, fiRes.Name, valFolder, WS.Name, Service.STC.ExcelFileTemplates);
                      Service.Inspector.AddError(new Error(errMsg));
                      throw new Exception(errMsg);
                   }
@@ -114,7 +123,7 @@ namespace ProjectsStructure.Model.Structures
          if (fiRes == null && !string.IsNullOrEmpty(valLast))
          {
             string errMsg = string.Format("Не определена новая папка структуры в строке {0} - лист {1}, файл {2}",
-                                       row, ws.Name, Service.STC.ExcelFileTemplates);
+                                       row, WS.Name, Service.STC.ExcelFileTemplates);
             Service.Inspector.AddError(new Error(errMsg));
             throw new Exception(errMsg);
          }

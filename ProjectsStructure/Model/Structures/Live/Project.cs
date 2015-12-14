@@ -107,6 +107,12 @@ namespace ProjectsStructure.Model.Structures.Live
 
          // Найти в шаблоне структуры место размещения объекта
          // найти соответствующее расположение этой папки в существующей структуре проекта
+         foreach (var fiObject in this.StructureTemplate.ObjectsFolders)
+         {
+            // Путь к этой папке объекта относительно корня сущ проекта
+            DirectoryInfo dirObject = new DirectoryInfo(Path.Combine(Dir.FullName, fiObject.FullPath()));
+            fiObject.Create(dirObject, objects);
+         }
       }
 
       /// <summary>

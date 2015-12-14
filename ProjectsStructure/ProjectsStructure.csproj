@@ -81,6 +81,10 @@
     <Compile Include="Model\Structures\Structure.cs" />
     <Compile Include="Model\Service.cs" />
     <Compile Include="Model\Structures\Template\FolderItemTemplate.cs" />
+    <Compile Include="Model\Structures\Template\FolderTypes\FactoryFolderItemTemplate.cs" />
+    <Compile Include="Model\Structures\Template\FolderTypes\FolderItemLink.cs" />
+    <Compile Include="Model\Structures\Template\FolderTypes\FolderItemObject.cs" />
+    <Compile Include="Model\Structures\Template\FolderTypes\FolderItemRoot.cs" />
     <Compile Include="Model\Structures\Template\StructureTemplate.cs" />
     <Compile Include="Model\Structures\Template\StructureTemplateCollection.cs" />
     <Compile Include="Model\Structures\Template\TemplateAcces.cs" />
